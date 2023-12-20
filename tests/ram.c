@@ -1,4 +1,4 @@
-#include "ramFunction.h"
+#include "ram.h"
 
 int initRAM(struct t_RAM* RAM)
 {

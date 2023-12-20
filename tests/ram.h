@@ -1,8 +1,8 @@
-#ifndef RAM_FUNCTION_H
-#define RAM_FUNCTION_H
+#ifndef RAM_H
+#define RAM_H
 
 /**
- * \file  ramFunction.h
+ * \file  ram.h
  * \brief Contient les declarations de la structure \ref t_RAM et des fonctions qui lui sont liee
  */
 
