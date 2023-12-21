@@ -3,7 +3,8 @@
 
 int main()
 {
-    printf("Code erreur write : %d\n", ((15) | (16)));
-
+    uint8_t a = 255;
+    uint16_t b = a;
+    printf("%d\n", b)
     return 0;
 }
