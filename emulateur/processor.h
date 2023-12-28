@@ -65,7 +65,7 @@ struct t_processor
  * \relates t_processor
  * \brief   alloue en memoire les elements de la structure \ref t_processor donnee en parametre
  * \param   processor  Processeur de l'emulateur
- * \return  0 si la memoire a bien ete alouee, -1 si elle n'a pas ete allouee
+ * \return  0 si la memoire a bien ete alouee, 1 si elle n'a pas ete allouee
  */
 int initProcessor(struct t_processor* processor);
 

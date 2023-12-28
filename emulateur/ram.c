@@ -4,7 +4,7 @@ int initRAM(struct t_RAM* RAM)
 {
     RAM->ram = malloc(4096*sizeof(uint8_t));
     if (RAM->ram == NULL)
-        return -1;
+        return 1;
     return 0;
 }
 

@@ -26,7 +26,7 @@ struct t_RAM
  * \relates t_RAM
  * \brief   alloue en memoire la ram d'une structure \ref t_RAM donnee en parametre
  * \param   RAM  RAM de l'emulateur
- * \return  0 si la memoire a bien ete alouee, -1 si elle n'a pas ete allouee
+ * \return  0 si la memoire a bien ete alouee, 1 si elle n'a pas ete allouee
  */
 int initRAM(struct t_RAM* RAM);
 
@@ -58,7 +58,7 @@ void deleteRAM(struct t_RAM* RAM);
  * \param   RAM  RAM de l'emulateur
  * \param   adr  adresse ou on veut ecrire la valeur donnee
  * \param   val  ecrit a l'adresse donnee cette valeur
- * \return  0 si la valeur a bien ete ecrite, -1 si la RAM donnee est NULL
+ * \return  0 si la valeur a bien ete ecrite, 1 si la RAM donnee est NULL
  */
 int writeRAM(struct t_RAM* RAM, uint8_t adr, uint8_t val);
 
