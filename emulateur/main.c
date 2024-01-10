@@ -3,8 +3,9 @@
 
 int main()
 {
-    uint8_t a = 255;
-    uint16_t b = a;
-    printf("%d\n", b)
+    uint8_t test2 = 240;
+    uint8_t test = test2/100;
+    printf("%d\n", test);
+    printf("%d\n", test2);
     return 0;
 }
