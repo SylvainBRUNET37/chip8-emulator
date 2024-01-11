@@ -12,6 +12,13 @@
 #include "processor.h"
 
 /**
+ * \brief Efface ce qu'il y a d'afficher sur l'écran
+ * \param processor processeur sur lequel faire l'instruction
+ * \return 0 si il n'y a pas eu d'erreur
+ */
+int clearDisplay_00E0(struct t_processor* processor);
+
+/**
  * \brief Place le compteur de programme à l'adresse du sommet de la pile, puis soustrait 1 au pointeur de pile
  * \param processor processeur sur lequel faire l'instruction
  * \return 0 si il n'y a pas eu d'erreur
@@ -281,6 +288,22 @@ int setItoSpriteX_Fx29(struct t_processor* processor, uint8_t x);
  * \param x indice de la valeur de Vx
  * \return 0 si il n'y a pas eu d'erreur, 1 si x superieur à 16
  */
-int setItoSpriteX_Fx33(struct t_processor* processor, uint8_t x);
+int setXtoI_Fx33(struct t_processor* processor, uint8_t x);
+
+/**
+ * \brief Copie les valeurs des registres V0 à Vx dans la mémoire, à partir de l'adresse I
+ * \param processor processeur sur lequel faire l'instruction
+ * \param x indice de la valeur de Vx
+ * \return 0 si il n'y a pas eu d'erreur, 1 si x superieur à 16
+ */
+int storeRegisterInMemory_Fx55(struct t_processor* processor, uint8_t x);
+
+/**
+ * \brief Lit les valeurs de la mémoire à partir de l'emplacement I dans les registres V0 à Vx
+ * \param processor processeur sur lequel faire l'instruction
+ * \param x indice de la valeur de Vx
+ * \return 0 si il n'y a pas eu d'erreur, 1 si x superieur à 16
+ */
+int readMemory_Fx65(struct t_processor* processor, uint8_t x);
 
 #endif

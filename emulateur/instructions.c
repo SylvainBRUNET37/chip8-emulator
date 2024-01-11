@@ -1,5 +1,10 @@
 #include "instructions.h"
 
+int clearDisplay_00E0(struct t_processor* processor)
+{
+    return 0;
+}
+
 int setPCtoTopStack_00EE(struct t_processor* processor)
 {
     processor->programCounter = processor->stack[processor->stackPointer];
@@ -255,16 +260,43 @@ int setItoSpriteX_Fx29(struct t_processor* processor, uint8_t x)
 {
     if (x > 16)
         return 1;
+    processor->IRegister = processor->generalRegister[x];
     return 0;
 }
 
-int setItoSpriteX_Fx33(struct t_processor* processor, uint8_t x)
+int setXtoI_Fx33(struct t_processor* processor, uint8_t x)
 {
     if (x > 16)
         return 1;
+
     uint8_t temp = processor->generalRegister[x];
-    uint8_t temp_I = processor->IRegister;
-    processor->IRegister >> 8 = temp / 100;
-    temp = temp%100;
+
+    processor->RAM->ram[processor->IRegister] = temp / 100;
+    temp %= 100;
+    processor->RAM->ram[processor->IRegister+1] = temp / 10;
+    temp %= 10;
+    processor->RAM->ram[processor->IRegister+2] = temp;
     return 0; 
+}
+
+int storeRegisterInMemory_Fx55(struct t_processor* processor, uint8_t x)
+{
+    if (x > 16)
+        return 1;
+
+    for (unsigned int i = 0 ; i < x ; i++)
+        processor->RAM->ram[processor->IRegister+i] = processor->generalRegister[i];
+
+    return 0;
+}
+
+int readMemory_Fx65(struct t_processor* processor, uint8_t x)
+{
+    if (x > 16)
+        return 1;
+
+    for (unsigned int i = 0 ; i < x ; i++)
+         processor->generalRegister[i] = processor->RAM->ram[processor->IRegister+i];
+
+    return 0;
 }
