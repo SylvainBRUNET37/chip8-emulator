@@ -60,3 +60,100 @@ void deleteProcessor(struct t_processor* processor)
         free(processor);
     }
 }
+
+void fetchDecodeExecute(struct t_processor* processor)
+{
+    fetch(processor);
+    decode(processor);
+}
+
+void fetch(struct t_processor* processor)
+{
+    processor->IRegister = processor->RAM->ram[processor->programCounter]
+    processor->IRegister << 8;
+    processor->IRegister += processor->RAM->ram[processor->programCounter]
+    processor->programCounter += 2;
+}
+
+void decode(struct t_processor* processor)
+{
+    if (processor->IRegister & 0xF000 == 0x0000)
+    {
+        if (processor->IRegister & 0x000F == 0x0000)
+        {
+            clearDisplay_00E0(processor);
+        }
+        else if (processor->IRegister & 0x000F == 0x000E)
+        {
+            
+        }
+        else
+            return 1;
+    }
+    else if (processor->IRegister & 0xF000 == 1)
+    {
+        
+    }
+    else if (processor->IRegister & 0xF000 == 2)
+    {
+
+    }
+    else if (processor->IRegister & 0xF000 == 3)
+    {
+        
+    }
+    else if (processor->IRegister & 0xF000 == 4)
+    {
+        
+    }
+    else if (processor->IRegister & 0xF000 == 5)
+    {
+        
+    }
+    else if (processor->IRegister & 0xF000 == 6)
+    {
+        
+    }
+    else if (processor->IRegister & 0xF000 == 7)
+    {
+        
+    }
+    else if (processor->IRegister & 0xF000 == 8)
+    {
+        
+    }
+    else if (processor->IRegister & 0xF000 == 9)
+    {
+        
+    }
+    else if (processor->IRegister & 0xF000 == 10)
+    {
+        
+    }
+    else if (processor->IRegister & 0xF000 == 11)
+    {
+        
+    }
+    else if (processor->IRegister & 0xF000 == 12)
+    {
+        
+    }
+    else if (processor->IRegister & 0xF000 == 13)
+    {
+        
+    }
+    else if (processor->IRegister & 0xF000 == 14)
+    {
+        
+    }
+    else if (processor->IRegister & 0xF000 == 15)
+    {
+        
+    }
+    else if (processor->IRegister & 0xF000 == 16)
+    {
+        
+    }
+    else
+        return 1;
+}
