@@ -81,7 +81,7 @@ void decode(struct t_processor* processor)
     {
         if (processor->IRegister & 0x000F == 0x0000)
         {
-            clearDisplay_00E0(processor);
+            CLS_00E0(processor);
         }
         else if (processor->IRegister & 0x000F == 0x000E)
         {

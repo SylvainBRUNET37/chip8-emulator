@@ -23,11 +23,12 @@ int CALL_2nnn(struct t_processor* processor, uint16_t nnn)
     processor->stackPointer++;
     processor->stack[processor->stackPointer] = processor->programCounter;
     processor->programCounter = nnn;
+    return 0;
 }
 
 int SE_3xkk(struct t_processor* processor, uint8_t x, uint8_t kk)
 {
-    if (x > 16)
+    if (x >= 16)
         return 1;
     if (processor->generalRegister[x] == kk)
         processor->programCounter += 2;
@@ -36,7 +37,7 @@ int SE_3xkk(struct t_processor* processor, uint8_t x, uint8_t kk)
 
 int SNE_4xkk(struct t_processor* processor, uint8_t x, uint8_t kk)
 {
-    if (x > 16)
+    if (x >= 16)
         return 1;
     if (processor->generalRegister[x] != kk)
         processor->programCounter += 2;
@@ -45,7 +46,7 @@ int SNE_4xkk(struct t_processor* processor, uint8_t x, uint8_t kk)
 
 int SE_5xy0(struct t_processor* processor, uint8_t x, uint8_t y)
 {
-    if (x > 16 || y > 16)
+    if (x >= 16 || y >= 16)
         return 1;
     if (processor->generalRegister[x] != processor->generalRegister[y])
         processor->programCounter += 2;
@@ -54,7 +55,7 @@ int SE_5xy0(struct t_processor* processor, uint8_t x, uint8_t y)
 
 int LD_6xkk(struct t_processor* processor, uint8_t x, uint8_t kk)
 {
-    if (x > 16)
+    if (x >= 16)
         return 1;
     processor->generalRegister[x] = kk;
     return 0;
@@ -62,7 +63,7 @@ int LD_6xkk(struct t_processor* processor, uint8_t x, uint8_t kk)
 
 int ADD_7xkk(struct t_processor* processor, uint8_t x, uint8_t kk)
 {
-    if (x > 16)
+    if (x >= 16)
         return 1;
     processor->generalRegister[x] += kk;
     return 0;
@@ -70,7 +71,7 @@ int ADD_7xkk(struct t_processor* processor, uint8_t x, uint8_t kk)
 
 int LD_8xy0(struct t_processor* processor, uint8_t x, uint8_t y)
 {
-    if (x > 16 || y > 16)
+    if (x >= 16 || y >= 16)
         return 1;
     processor->generalRegister[x] = processor->generalRegister[y];
     return 0;
@@ -78,7 +79,7 @@ int LD_8xy0(struct t_processor* processor, uint8_t x, uint8_t y)
 
 int OR_8xy1(struct t_processor* processor, uint8_t x, uint8_t y)
 {
-    if (x > 16 || y > 16)
+    if (x >= 16 || y >= 16)
         return 1;
     processor->generalRegister[x] = ((processor->generalRegister[x]) | (processor->generalRegister[y]));
     return 0;
@@ -86,7 +87,7 @@ int OR_8xy1(struct t_processor* processor, uint8_t x, uint8_t y)
 
 int AND_8xy2(struct t_processor* processor, uint8_t x, uint8_t y)
 {
-    if (x > 16 || y > 16)
+    if (x >= 16 || y >= 16)
         return 1;
     processor->generalRegister[x] = ((processor->generalRegister[x]) & (processor->generalRegister[y]));
     return 0;
@@ -94,7 +95,7 @@ int AND_8xy2(struct t_processor* processor, uint8_t x, uint8_t y)
 
 int XOR_8xy3(struct t_processor* processor, uint8_t x, uint8_t y)
 {
-    if (x > 16 || y > 16)
+    if (x >= 16 || y >= 16)
         return 1;
     processor->generalRegister[x] = ((processor->generalRegister[x]) ^ (processor->generalRegister[y]));
     return 0;
@@ -102,7 +103,7 @@ int XOR_8xy3(struct t_processor* processor, uint8_t x, uint8_t y)
 
 int ADD_8xy4(struct t_processor* processor, uint8_t x, uint8_t y)
 {
-    if (x > 16 || y > 16)
+    if (x >= 16 || y >= 16)
         return 1;
     uint16_t temp = x + y;
     if (temp > 255)
@@ -116,7 +117,7 @@ int ADD_8xy4(struct t_processor* processor, uint8_t x, uint8_t y)
 
 int SUB_8xy5(struct t_processor* processor, uint8_t x, uint8_t y)
 {
-    if (x > 16 || y > 16)
+    if (x >= 16 || y >= 16)
         return 1;
     // Si Vx est supérieur à Vy, met VF à 1
     if (processor->generalRegister[x] > processor->generalRegister[y])
@@ -129,20 +130,20 @@ int SUB_8xy5(struct t_processor* processor, uint8_t x, uint8_t y)
 
 int SHR_8xy6(struct t_processor* processor, uint8_t x)
 {
-    if (x > 16)
+    if (x >= 16)
         return 1;
     // Si le bit de poid le plus faible de Vx est égale à 1, met le reste dans VF
     if ((processor->generalRegister[x] & 1) == 1)
     {
         processor->generalRegister[15] = 1;
     }
-    processor->generalRegister[x] /= 2;
+    processor->generalRegister[x] >>= 1;
     return 0;
 }
 
 int SUBN_8xy7(struct t_processor* processor, uint8_t x, uint8_t y)
 {
-    if (x > 16 || y > 16)
+    if (x >= 16 || y >= 16)
         return 1;
     // Si Vy est supérieur à Vx, met VF à 1
     if (processor->generalRegister[y] > processor->generalRegister[x])
@@ -155,20 +156,20 @@ int SUBN_8xy7(struct t_processor* processor, uint8_t x, uint8_t y)
 
 int SHL_8xyE(struct t_processor* processor, uint8_t x)
 {
-    if (x > 16)
+    if (x >= 16)
         return 1;
     // Si le bit de poid le plus fort de Vx est égale à 1, met le reste dans VF
-    if ((processor->generalRegister[x] & 128) == 1)
+    if ((processor->generalRegister[x] & 0x80) == 1)
     {
         processor->generalRegister[15] = 1;
     }
-    processor->generalRegister[x] *= 2;
+    processor->generalRegister[x] <<= 1;
     return 0;
 }
 
 int SNE_9xy0(struct t_processor* processor, uint8_t x, uint8_t y)
 {
-    if (x > 16 || y > 16)
+    if (x >= 16 || y >= 16)
         return 1;
     if (processor->generalRegister[x] != processor->generalRegister[y])
         processor->programCounter += 2;
@@ -189,37 +190,37 @@ int JP_Bnnn(struct t_processor* processor, uint16_t nnn)
 
 int RND_Cxkk(struct t_processor* processor, uint8_t x, uint8_t kk)
 {
-    if (x > 16)
+    if (x >= 16)
         return 1;
-    uint8_t temp = rand();
-    processor->generalRegister[x] = temp & kk;
+    uint8_t temp = rand() % (kk + 1);
+    processor->generalRegister[x] = temp;
     return 0;
 }
 
 int DRW_Dxyn(struct t_processor* processor, uint8_t x, uint8_t y, uint8_t n)
 {
-    if (x > 16 || y > 16 || n > 16)
+    if (x >= 16 || y >= 16 || n >= 16)
         return 1;
     return 0;
 }
 
 int SKP_Ex9E(struct t_processor* processor, uint8_t x)
 {
-    if (x > 16)
+    if (x >= 16)
         return 1;
     return 0;
 }
 
 int SKNP_ExA1(struct t_processor* processor, uint8_t x)
 {
-    if (x > 16)
+    if (x >= 16)
         return 1;
     return 0;
 }
 
 int LD_Fx07(struct t_processor* processor, uint8_t x)
 {
-    if (x > 16)
+    if (x >= 16)
         return 1;
     processor->generalRegister[x] = processor->delayTimerRegister;
     return 0;
@@ -227,14 +228,14 @@ int LD_Fx07(struct t_processor* processor, uint8_t x)
 
 int LD_Fx0A(struct t_processor* processor, uint8_t x)
 {
-    if (x > 16)
+    if (x >= 16)
         return 1;
     return 0;
 }
 
 int LD_Fx15(struct t_processor* processor, uint8_t x)
 {
-    if (x > 16)
+    if (x >= 16)
         return 1;
     processor->soundTimerRegister = processor->generalRegister[x];
     return 0;
@@ -242,7 +243,7 @@ int LD_Fx15(struct t_processor* processor, uint8_t x)
 
 int LD_Fx18(struct t_processor* processor, uint8_t x)
 {
-    if (x > 16)
+    if (x >= 16)
         return 1;
     processor->delayTimerRegister = processor->generalRegister[x];
     return 0;
@@ -250,7 +251,7 @@ int LD_Fx18(struct t_processor* processor, uint8_t x)
 
 int ADD_Fx1E(struct t_processor* processor, uint8_t x)
 {
-    if (x > 16)
+    if (x >= 16)
         return 1;
     processor->IRegister += processor->generalRegister[x];
     return 0;
@@ -258,7 +259,7 @@ int ADD_Fx1E(struct t_processor* processor, uint8_t x)
 
 int LD_Fx29(struct t_processor* processor, uint8_t x)
 {
-    if (x > 16)
+    if (x >= 16)
         return 1;
     processor->IRegister = processor->generalRegister[x];
     return 0;
@@ -266,7 +267,7 @@ int LD_Fx29(struct t_processor* processor, uint8_t x)
 
 int LD_Fx33(struct t_processor* processor, uint8_t x)
 {
-    if (x > 16)
+    if (x >= 16)
         return 1;
 
     uint8_t temp = processor->generalRegister[x];
@@ -281,10 +282,10 @@ int LD_Fx33(struct t_processor* processor, uint8_t x)
 
 int LD_Fx55(struct t_processor* processor, uint8_t x)
 {
-    if (x > 16)
+    if (x >= 16)
         return 1;
 
-    for (unsigned int i = 0 ; i < x ; i++)
+    for (unsigned int i = 0 ; i <= x ; i++)
         processor->RAM->ram[processor->IRegister+i] = processor->generalRegister[i];
 
     return 0;
@@ -292,10 +293,10 @@ int LD_Fx55(struct t_processor* processor, uint8_t x)
 
 int LD_Fx65(struct t_processor* processor, uint8_t x)
 {
-    if (x > 16)
+    if (x >= 16)
         return 1;
 
-    for (unsigned int i = 0 ; i < x ; i++)
+    for (unsigned int i = 0 ; i <= x ; i++)
          processor->generalRegister[i] = processor->RAM->ram[processor->IRegister+i];
 
     return 0;
