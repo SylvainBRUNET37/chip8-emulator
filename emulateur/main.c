@@ -1,5 +1,5 @@
-#include "ram.h"
-#include "processor.h"
+#include "./include/ram.h"
+#include "./include/processor.h"
 
 int main()
 {

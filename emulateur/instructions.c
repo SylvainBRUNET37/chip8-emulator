@@ -1,7 +1,8 @@
-#include "instructions.h"
+#include "./include/instructions.h"
 
 int CLS_00E0(struct t_processor* processor)
 {
+    Display_update(processor->display);
     return 0;
 }
 

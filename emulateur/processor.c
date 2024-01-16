@@ -1,10 +1,14 @@
-#include "processor.h"
+#include "./include/instructions.h"
 
 int initProcessor(struct t_processor* processor)
 { 
     processor->RAM = newRAM();
     if ((processor->RAM) == NULL)
         return 1;
+
+    Display_init(processor->display, 10);
+    Speaker_init(processor->speaker);
+    Keyboard_init(processor->keyboard);
 
     unsigned int i = 0;
     for (i = 0 ; i < nbGeneralRegister ; i ++)
@@ -25,6 +29,9 @@ void destroyProcessor(struct t_processor* processor)
 {
     if (processor != NULL)
     {
+        Display_destroy(processor->display);
+        Speaker_destroy(processor->speaker);
+        Keyboard_destroy(processor->keyboard);
         destroyRAM(processor->RAM);
         free(processor->RAM);
 

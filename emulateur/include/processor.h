@@ -10,7 +10,9 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "ram.h"
-#include "instructions.h"
+#include "display.h"
+#include "speaker.h"
+#include "keyboard.h"
 
 #define nbGeneralRegister 16
 #define nbStackElement 16
@@ -37,7 +39,7 @@ struct t_processor
     uint8_t delayTimerRegister;
 
     /**
-    * \brief Timer  pour le buzzer
+    * \brief Timer pour le buzzer
     */
     uint8_t soundTimerRegister;
 
@@ -46,7 +48,7 @@ struct t_processor
     */
     uint16_t stack[nbStackElement];
 
-    /**
+    /**Speaker
     * \brief Compteur de programme (contient l'adresse a executer)
     */
     uint16_t programCounter;
@@ -60,6 +62,22 @@ struct t_processor
     * \brief RAM du processeur
     */
     struct t_RAM* RAM;
+
+    /**
+    * \brief Emule un écran monochrome 64x32
+    */
+    struct Display* display;
+
+    /**
+    * \brief Emule un haut-parleur monotone (buzzer)
+    */
+    struct Speaker* speaker;
+
+    /**
+    * \brief Emule un clavier à 16 touches
+    */
+    struct Keyboard* keyboard;
+
 };
 
 /**
