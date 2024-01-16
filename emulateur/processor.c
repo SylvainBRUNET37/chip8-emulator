@@ -69,9 +69,9 @@ void fetchDecodeExecute(struct t_processor* processor)
 
 void fetch(struct t_processor* processor)
 {
-    processor->IRegister = processor->RAM->ram[processor->programCounter]
+    processor->IRegister = processor->RAM->ram[processor->programCounter];
     processor->IRegister << 8;
-    processor->IRegister += processor->RAM->ram[processor->programCounter]
+    processor->IRegister += processor->RAM->ram[processor->programCounter];
     processor->programCounter += 2;
 }
 
@@ -87,8 +87,6 @@ void decode(struct t_processor* processor)
         {
             
         }
-        else
-            return 1;
     }
     else if (processor->IRegister & 0xF000 == 1)
     {
@@ -154,6 +152,4 @@ void decode(struct t_processor* processor)
     {
         
     }
-    else
-        return 1;
 }

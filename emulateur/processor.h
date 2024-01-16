@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "ram.h"
+#include "instructions.h"
 
 #define nbGeneralRegister 16
 #define nbStackElement 16
