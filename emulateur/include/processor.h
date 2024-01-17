@@ -13,6 +13,7 @@
 #include "display.h"
 #include "speaker.h"
 #include "keyboard.h"
+#include "sprite.h"
 
 #define nbGeneralRegister 16
 #define nbStackElement 16
@@ -77,7 +78,6 @@ struct t_processor
     * \brief Emule un clavier à 16 touches
     */
     struct Keyboard* keyboard;
-
 };
 
 /**

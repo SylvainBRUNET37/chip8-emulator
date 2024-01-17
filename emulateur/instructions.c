@@ -2,7 +2,7 @@
 
 int CLS_00E0(struct t_processor* processor)
 {
-    Display_update(processor->display);
+    Display_CLS(processor->display);
     return 0;
 }
 
@@ -202,6 +202,17 @@ int DRW_Dxyn(struct t_processor* processor, uint8_t x, uint8_t y, uint8_t n)
 {
     if (x >= 16 || y >= 16 || n >= 16)
         return 1;
+
+    uint8_t temp = 0;
+    struct Sprite sprite;
+    Sprite_init(&sprite,n);
+    for (unsigned int i = 0 ; i < n ; i++)
+    {
+        temp = processor->RAM->ram[processor->IRegister+i];
+        Sprite_add(&sprite, temp);
+    }
+    Display_DRW(processor->display, &sprite, processor->generalRegister[x], processor->generalRegister[y], &processor->generalRegister[15]);
+    Sprite_destroy(&sprite);
     return 0;
 }
 
@@ -209,6 +220,10 @@ int SKP_Ex9E(struct t_processor* processor, uint8_t x)
 {
     if (x >= 16)
         return 1;
+    uint8_t temp = 0;
+    Keyboard_wait(processor->keyboard, &temp);
+    if (temp == processor->generalRegister[x])
+        processor->programCounter += 2;
     return 0;
 }
 
@@ -216,6 +231,10 @@ int SKNP_ExA1(struct t_processor* processor, uint8_t x)
 {
     if (x >= 16)
         return 1;
+    uint8_t temp = 0;
+    Keyboard_wait(processor->keyboard, &temp);
+    if (temp != processor->generalRegister[x])
+        processor->programCounter += 2;
     return 0;
 }
 
@@ -231,6 +250,8 @@ int LD_Fx0A(struct t_processor* processor, uint8_t x)
 {
     if (x >= 16)
         return 1;
+
+    Keyboard_wait(processor->keyboard, &processor->generalRegister[x]);
     return 0;
 }
 
