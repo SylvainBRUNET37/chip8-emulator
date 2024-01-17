@@ -30,8 +30,13 @@ void destroyProcessor(struct t_processor* processor)
     if (processor != NULL)
     {
         Display_destroy(processor->display);
+        free(processor->display);
+        
         Speaker_destroy(processor->speaker);
+        free(processor->speaker);
+        
         Keyboard_destroy(processor->keyboard);
+        free(processor->keyboard));
 
         destroyRAM(processor->RAM);
         free(processor->RAM);

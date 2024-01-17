@@ -1,10 +1,8 @@
-#include "./include/ram.h"
-#include "./include/processor.h"
+#include "./include/machine.h"
 
 int main()
 {
-    uint16_t IRegister = 44;
-
-    printf("%d\n", IRegister);
+    //manageMachine();
+    printf("CA COMPIL\n");
     return 0;
 }
