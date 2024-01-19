@@ -76,93 +76,157 @@ void deleteProcessor(struct t_processor* processor)
 
 void fetchDecodeExecute(struct t_processor* processor)
 {
-    fetch(processor);
-    decode(processor);
-}
-
-void fetch(struct t_processor* processor)
-{
-    processor->IRegister = processor->RAM->ram[processor->programCounter];
+    processor->IRegister = processor->RAM->ram[processor->programCounter];  
     processor->IRegister << 8;
     processor->IRegister += processor->RAM->ram[processor->programCounter];
     processor->programCounter += 2;
-}
 
-void decode(struct t_processor* processor)
-{
-    if (processor->IRegister & 0xF000 == 0x0000)
+    if (processor->IRegister & (uint8_t)0xF000 == 0x0000)
     {
-        if (processor->IRegister & 0x000F == 0x0000)
+        if (processor->IRegister & (uint8_t)0xFFFF == 0x00E0)
         {
             CLS_00E0(processor);
         }
-        else if (processor->IRegister & 0x000F == 0x000E)
+        else if (processor->IRegister & (uint8_t)0xFFFF == 0x00EE)
         {
-            
+            RET_00EE(processor);
         }
     }
-    else if (processor->IRegister & 0xF000 == 1)
+    else if (processor->IRegister & (uint8_t)0xF000 == 0x1000)
     {
-        
+        JP_1nnn(processor, processor->IRegister & (uint8_t)0x0FFF);
     }
-    else if (processor->IRegister & 0xF000 == 2)
+    else if (processor->IRegister & (uint8_t)0xF000 == 0x2000)
     {
-
+        CALL_2nnn(processor, processor->IRegister & (uint8_t)0x0FFF);
     }
-    else if (processor->IRegister & 0xF000 == 3)
+    else if (processor->IRegister & (uint8_t)0xF000 == 0x3000)
     {
-        
+        SE_3xkk(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00FF);
     }
-    else if (processor->IRegister & 0xF000 == 4)
+    else if (processor->IRegister & (uint8_t)0xF000 == 0x4000)
     {
-        
+        SNE_4xkk(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00FF);
     }
-    else if (processor->IRegister & 0xF000 == 5)
+    else if (processor->IRegister & (uint8_t)0xF00F == 0x5000)
     {
-        
+        SE_5xy0(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0);
     }
-    else if (processor->IRegister & 0xF000 == 6)
+    else if (processor->IRegister & (uint8_t)0xF000 == 0x6000)
     {
-        
+        LD_6xkk(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00FF);
     }
-    else if (processor->IRegister & 0xF000 == 7)
+    else if (processor->IRegister & (uint8_t)0xF000 == 0x7000)
     {
-        
+        ADD_7xkk(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00FF);
     }
-    else if (processor->IRegister & 0xF000 == 8)
+    else if (processor->IRegister & (uint8_t)0xF000 == 0x8000)
     {
-        
+        if (processor->IRegister & (uint8_t)0xF00F == 0x8000)
+        {
+            LD_8xy0(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0);
+        }
+        else if (processor->IRegister & (uint8_t)0xF00F == 0x8001)
+        {
+            OR_8xy1(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0);
+        }
+        else if (processor->IRegister & (uint8_t)0xF00F == 0x8002)
+        {
+            AND_8xy2(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0);
+        }
+        else if (processor->IRegister & (uint8_t)0xF00F == 0x8003)
+        {
+            XOR_8xy3(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0);
+        }
+        else if (processor->IRegister & (uint8_t)0xF00F == 0x8004)
+        {
+            ADD_8xy4(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0);
+        }
+        else if (processor->IRegister & (uint8_t)0xF00F == 0x8005)
+        {
+            SUB_8xy5(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0);
+        }
+        else if (processor->IRegister & (uint8_t)0xF00F == 0x8006)
+        {
+            SHR_8xy6(processor, processor->IRegister & (uint8_t)0x0F00);
+        }   
+        else if (processor->IRegister & (uint8_t)0xF00F == 0x8007)
+        {
+            SUBN_8xy7(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0);
+        }
+        else if (processor->IRegister & (uint8_t)0xF00F == 0x800E)
+        {
+            SHL_8xyE(processor, processor->IRegister & (uint8_t)0x0F00);
+        }
     }
-    else if (processor->IRegister & 0xF000 == 9)
+    else if (processor->IRegister & (uint8_t)0xF00F == 0x9000)
     {
-        
+        SNE_9xy0(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0);
     }
-    else if (processor->IRegister & 0xF000 == 10)
+    else if (processor->IRegister & (uint8_t)0xF000 == 0xA000)
     {
-        
+        LD_Annn(processor, processor->IRegister & (uint8_t)0x0FFF);
     }
-    else if (processor->IRegister & 0xF000 == 11)
+    else if (processor->IRegister & (uint8_t)0xF000 == 0xB000)
     {
-        
+        JP_Bnnn(processor, processor->IRegister & (uint8_t)0x0FFF);
     }
-    else if (processor->IRegister & 0xF000 == 12)
+    else if (processor->IRegister & (uint8_t)0xF000 == 0xC000)
     {
-        
+        RND_Cxkk(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00FF);
     }
-    else if (processor->IRegister & 0xF000 == 13)
+    else if (processor->IRegister & (uint8_t)0xF000 == 0xD000)
     {
-        
+        DRW_Dxyn(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0, processor->IRegister & (uint8_t)0x000F);
     }
-    else if (processor->IRegister & 0xF000 == 14)
+    else if (processor->IRegister & (uint8_t)0xF000 == 0xE000)
     {
-        
+        if (processor->IRegister & (uint8_t)0xF0FF == 0xE09E)
+        {
+            SKP_Ex9E(processor, processor->IRegister & (uint8_t)0x0F00);
+        }
+        else if (processor->IRegister & (uint8_t)0xF0FF == 0xE0A1)
+        {
+            SKNP_ExA1(processor, processor->IRegister & (uint8_t)0x0F00);
+        }
     }
-    else if (processor->IRegister & 0xF000 == 15)
+    else if (processor->IRegister & (uint8_t)0xF000 == 0xF000)
     {
-        
-    }
-    else if (processor->IRegister & 0xF000 == 16)
-    {
-        
+        if (processor->IRegister & (uint8_t)0xF000 == 0xF007)
+        {
+            LD_Fx07(processor, processor->IRegister & (uint8_t)0x0F00);
+        }
+        else if (processor->IRegister & (uint8_t)0xF0FF == 0xF00A)
+        {
+            LD_Fx0A(processor, processor->IRegister & (uint8_t)0x0F00);
+        }
+        else if (processor->IRegister & (uint8_t)0xF0FF == 0xF015)
+        {
+            LD_Fx15(processor, processor->IRegister & (uint8_t)0x0F00);
+        }
+        else if (processor->IRegister & (uint8_t)0xF0FF == 0xF018)
+        {
+            LD_Fx18(processor, processor->IRegister & (uint8_t)0x0F00);
+        }
+        else if (processor->IRegister & (uint8_t)0xF0FF == 0xF01E)
+        {
+            ADD_Fx1E(processor, processor->IRegister & (uint8_t)0x0F00);
+        }
+        else if (processor->IRegister & (uint8_t)0xF0FF == 0xF029)
+        {
+            LD_Fx29(processor, processor->IRegister & (uint8_t)0x0F00);
+        }
+        else if (processor->IRegister & (uint8_t)0xF0FF == 0xF033)
+        {
+            LD_Fx33(processor, processor->IRegister & (uint8_t)0x0F00);
+        }
+        else if (processor->IRegister & (uint8_t)0xF0FF == 0xF055)
+        {
+            LD_Fx55(processor, processor->IRegister & (uint8_t)0x0F00);
+        }
+        else if (processor->IRegister & (uint8_t)0xF0FF == 0xF065)
+        {
+            LD_Fx65(processor, processor->IRegister & (uint8_t)0x0F00);
+        }
     }
 }

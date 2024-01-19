@@ -117,18 +117,4 @@ void deleteProcessor(struct t_processor* processor);
  */
 void fetchDecodeExecute(struct t_processor* processor);
 
-/**
- * \relates t_processor
- * \brief   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
- * \param   processor  Processeur de l'emulateur
- */
-void fetch(struct t_processor* processor);
-
-/**
- * \relates t_processor
- * \brief   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
- * \param   processor  Processeur de l'emulateur
- */
-void decode(struct t_processor* processor);
-
 #endif
