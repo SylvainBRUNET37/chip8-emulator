@@ -2,7 +2,7 @@
 
 int main()
 {
-    //manageMachine();
+    manageMachine();
     printf("CA COMPIL\n");
     return 0;
 }

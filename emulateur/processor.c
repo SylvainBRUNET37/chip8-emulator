@@ -6,14 +6,18 @@ int initProcessor(struct t_processor* processor)
     if ((processor->RAM) == NULL)
         return 1;
 
+    processor->display = malloc(sizeof(struct Display));
+    processor->speaker = malloc(sizeof(struct Speaker));
+    processor->keyboard = malloc(sizeof(struct Keyboard));
+
     Display_init(processor->display, 10);
     Speaker_init(processor->speaker);
     Keyboard_init(processor->keyboard);
 
     unsigned int i = 0;
-    for (i = 0 ; i < nbGeneralRegister ; i ++)
+    for (i = 0 ; i < nbGeneralRegister ; i++)
         processor->generalRegister[i] = 0;
-    for (i = 0 ; i < nbStackElement ; i ++)
+    for (i = 0 ; i < nbStackElement ; i++)
         processor->stack[i] = 0;
     
     processor->delayTimerRegister = 0;
