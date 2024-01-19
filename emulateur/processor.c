@@ -36,7 +36,7 @@ void destroyProcessor(struct t_processor* processor)
         free(processor->speaker);
         
         Keyboard_destroy(processor->keyboard);
-        free(processor->keyboard));
+        free(processor->keyboard);
 
         destroyRAM(processor->RAM);
         free(processor->RAM);
