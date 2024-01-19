@@ -78,12 +78,21 @@ void deleteProcessor(struct t_processor* processor)
     }
 }
 
+void decrementTimer(struct t_processor* processor)
+{
+    if (processor->delayTimerRegister != 0)
+        processor->delayTimerRegister--;
+    if (processor->soundTimerRegister != 0)
+        processor->soundTimerRegister--;
+}
+
 void fetchDecodeExecute(struct t_processor* processor)
 {
-    processor->IRegister = processor->RAM->ram[processor->programCounter];  
+    processor->IRegister = readRAM(processor->RAM, processor->programCounter);  
     processor->IRegister << 8;
-    processor->IRegister += processor->RAM->ram[processor->programCounter];
     processor->programCounter += 2;
+
+    printf("iRegister : %d\n", processor->IRegister);
 
     if (processor->IRegister & (uint8_t)0xF000 == 0x0000)
     {

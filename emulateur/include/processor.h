@@ -112,6 +112,13 @@ void deleteProcessor(struct t_processor* processor);
 
 /**
  * \relates t_processor
+ * \brief   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+ * \param   processor  Processeur de l'emulateur
+ */
+void decrementTimer(struct t_processor* processor);
+
+/**
+ * \relates t_processor
  * \brief   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
  * \param   processor  Processeur de l'emulateur
  */
