@@ -174,7 +174,7 @@ int SUBN_8xy7(struct t_processor* processor, uint8_t x, uint8_t y)
     if (processor->generalRegister[y] > processor->generalRegister[x])
         processor->generalRegister[15] = 1;
     else
-        processor->generalRegister[15] = 1;
+        processor->generalRegister[15] = 0;
     // Vx est soustrait de Vy et le résultat est stocké dans Vx
     processor->generalRegister[x] = processor->generalRegister[y] - processor->generalRegister[x];
     return 0;
@@ -187,9 +187,9 @@ int SHL_8xyE(struct t_processor* processor, uint8_t x)
         return 1;
     // Si le bit de poid le plus fort de Vx est égale à 1, met le reste dans VF
     if ((processor->generalRegister[x] & 0x80) == 1)
-    {
         processor->generalRegister[15] = 1;
-    }
+    else
+        processor->generalRegister[15] = 0;
     processor->generalRegister[x] <<= 1;
     return 0;
 }
