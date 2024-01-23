@@ -33,7 +33,7 @@ void deleteRAM(struct t_RAM* RAM)
     }
 }
 
-int writeRAM(struct t_RAM* RAM, uint8_t adr, uint8_t val)
+int writeRAM(struct t_RAM* RAM, uint16_t adr, uint8_t val)
 {
     if (RAM == NULL)
         return -1;
@@ -41,7 +41,7 @@ int writeRAM(struct t_RAM* RAM, uint8_t adr, uint8_t val)
     return 0;
 }
 
-uint8_t readRAM(struct t_RAM* RAM, uint8_t adr)
+uint8_t readRAM(struct t_RAM* RAM, uint16_t adr)
 {
     return RAM->ram[adr];
 }

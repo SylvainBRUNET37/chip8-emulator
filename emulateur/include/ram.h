@@ -60,7 +60,7 @@ void deleteRAM(struct t_RAM* RAM);
  * \param   val  ecrit a l'adresse donnee cette valeur
  * \return  0 si la valeur a bien ete ecrite, 1 si la RAM donnee est NULL
  */
-int writeRAM(struct t_RAM* RAM, uint8_t adr, uint8_t val);
+int writeRAM(struct t_RAM* RAM, uint16_t adr, uint8_t val);
 
 /**
  * \relates t_RAM
@@ -69,6 +69,6 @@ int writeRAM(struct t_RAM* RAM, uint8_t adr, uint8_t val);
  * \param   adr  adresse ou on veut lire la valeur donnee
  * \return  la valeur de l'adresse donnee
  */
-uint8_t readRAM(struct t_RAM* RAM, uint8_t adr);
+uint8_t readRAM(struct t_RAM* RAM, uint16_t adr);
 
 #endif

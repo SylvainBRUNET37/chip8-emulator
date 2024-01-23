@@ -88,158 +88,165 @@ void decrementTimer(struct t_processor* processor)
 
 void fetchDecodeExecute(struct t_processor* processor)
 {
-    processor->IRegister = readRAM(processor->RAM, processor->programCounter);  
-    processor->IRegister << 8;
+    uint16_t instruction = readRAM(processor->RAM, processor->programCounter);
+    printf("1 : %d\n", instruction);
+    instruction = instruction << 8;
+    instruction += readRAM(processor->RAM, processor->programCounter+1);
     processor->programCounter += 2;
 
-    printf("iRegister : %d\n", processor->IRegister);
-
-    if (processor->IRegister & (uint8_t)0xF000 == 0x0000)
+    printf("2 : %d\n", instruction);
+    
+    if ((instruction & 0xF000) == 0x0000)
     {
-        if (processor->IRegister & (uint8_t)0xFFFF == 0x00E0)
+        if ((instruction & 0xFFFF) == 0x00E0)
         {
+            printf("test_cls\n");
             CLS_00E0(processor);
         }
-        else if (processor->IRegister & (uint8_t)0xFFFF == 0x00EE)
+        else if ((instruction & 0xFFFF) == 0x00EE)
         {
             RET_00EE(processor);
         }
     }
-    else if (processor->IRegister & (uint8_t)0xF000 == 0x1000)
+    else if ((instruction & 0xF000) == 0x1000)
     {
-        JP_1nnn(processor, processor->IRegister & (uint8_t)0x0FFF);
+        printf("test_jp\n");
+        JP_1nnn(processor, instruction & 0x0FFF);
     }
-    else if (processor->IRegister & (uint8_t)0xF000 == 0x2000)
+    else if ((instruction & 0xF000) == 0x2000)
     {
-        CALL_2nnn(processor, processor->IRegister & (uint8_t)0x0FFF);
+        CALL_2nnn(processor, instruction  & 0x0FFF);
     }
-    else if (processor->IRegister & (uint8_t)0xF000 == 0x3000)
+    else if ((instruction & 0xF000) == 0x3000)
     {
-        SE_3xkk(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00FF);
+        SE_3xkk(processor, (instruction & 0x0F00) >> 8, instruction & 0x00FF);
     }
-    else if (processor->IRegister & (uint8_t)0xF000 == 0x4000)
+    else if ((instruction & 0xF000) == 0x4000)
     {
-        SNE_4xkk(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00FF);
+        SNE_4xkk(processor, (instruction & 0x0F00) >> 8, (instruction & 0x00FF));
     }
-    else if (processor->IRegister & (uint8_t)0xF00F == 0x5000)
+    else if ((instruction & 0xF00F) == 0x5000)
     {
-        SE_5xy0(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0);
+        SE_5xy0(processor, (instruction & 0x0F00) >> 8, (instruction & 0x00F0));
     }
-    else if (processor->IRegister & (uint8_t)0xF000 == 0x6000)
+    else if ((instruction & 0xF000) == 0x6000)
     {
-        LD_6xkk(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00FF);
+        printf("test_ld\n");
+        LD_6xkk(processor, (instruction & 0x0F00) >> 8, (u_int8_t)(instruction & 0x00FF));
     }
-    else if (processor->IRegister & (uint8_t)0xF000 == 0x7000)
+    else if ((instruction & 0xF000) == 0x7000)
     {
-        ADD_7xkk(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00FF);
+        ADD_7xkk(processor, (instruction & 0x0F00), instruction  & 0x00FF);
     }
-    else if (processor->IRegister & (uint8_t)0xF000 == 0x8000)
+    else if (instruction  & 0xF000 == 0x8000)
     {
-        if (processor->IRegister & (uint8_t)0xF00F == 0x8000)
+        if (instruction  & 0xF00F == 0x8000)
         {
-            LD_8xy0(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0);
+            LD_8xy0(processor, instruction  & 0x0F00, instruction  & 0x00F0);
         }
-        else if (processor->IRegister & (uint8_t)0xF00F == 0x8001)
+        else if (instruction  & 0xF00F == 0x8001)
         {
-            OR_8xy1(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0);
+            OR_8xy1(processor, instruction  & 0x0F00, instruction  & 0x00F0);
         }
-        else if (processor->IRegister & (uint8_t)0xF00F == 0x8002)
+        else if (instruction  & 0xF00F == 0x8002)
         {
-            AND_8xy2(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0);
+            AND_8xy2(processor, instruction  & 0x0F00, instruction  & 0x00F0);
         }
-        else if (processor->IRegister & (uint8_t)0xF00F == 0x8003)
+        else if (instruction  & 0xF00F == 0x8003)
         {
-            XOR_8xy3(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0);
+            XOR_8xy3(processor, instruction  & 0x0F00, instruction  & 0x00F0);
         }
-        else if (processor->IRegister & (uint8_t)0xF00F == 0x8004)
+        else if (instruction  & 0xF00F == 0x8004)
         {
-            ADD_8xy4(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0);
+            ADD_8xy4(processor, instruction  & 0x0F00, instruction  & 0x00F0);
         }
-        else if (processor->IRegister & (uint8_t)0xF00F == 0x8005)
+        else if (instruction  & 0xF00F == 0x8005)
         {
-            SUB_8xy5(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0);
+            SUB_8xy5(processor, instruction  & 0x0F00, instruction  & 0x00F0);
         }
-        else if (processor->IRegister & (uint8_t)0xF00F == 0x8006)
+        else if (instruction & 0xF00F == 0x8006)
         {
-            SHR_8xy6(processor, processor->IRegister & (uint8_t)0x0F00);
+            SHR_8xy6(processor, instruction  & 0x0F00);
         }   
-        else if (processor->IRegister & (uint8_t)0xF00F == 0x8007)
+        else if (instruction & 0xF00F == 0x8007)
         {
-            SUBN_8xy7(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0);
+            SUBN_8xy7(processor, instruction & 0x0F00, instruction & 0x00F0);
         }
-        else if (processor->IRegister & (uint8_t)0xF00F == 0x800E)
+        else if (instruction & 0xF00F == 0x800E)
         {
-            SHL_8xyE(processor, processor->IRegister & (uint8_t)0x0F00);
-        }
-    }
-    else if (processor->IRegister & (uint8_t)0xF00F == 0x9000)
-    {
-        SNE_9xy0(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0);
-    }
-    else if (processor->IRegister & (uint8_t)0xF000 == 0xA000)
-    {
-        LD_Annn(processor, processor->IRegister & (uint8_t)0x0FFF);
-    }
-    else if (processor->IRegister & (uint8_t)0xF000 == 0xB000)
-    {
-        JP_Bnnn(processor, processor->IRegister & (uint8_t)0x0FFF);
-    }
-    else if (processor->IRegister & (uint8_t)0xF000 == 0xC000)
-    {
-        RND_Cxkk(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00FF);
-    }
-    else if (processor->IRegister & (uint8_t)0xF000 == 0xD000)
-    {
-        DRW_Dxyn(processor, processor->IRegister & (uint8_t)0x0F00, processor->IRegister & (uint8_t)0x00F0, processor->IRegister & (uint8_t)0x000F);
-    }
-    else if (processor->IRegister & (uint8_t)0xF000 == 0xE000)
-    {
-        if (processor->IRegister & (uint8_t)0xF0FF == 0xE09E)
-        {
-            SKP_Ex9E(processor, processor->IRegister & (uint8_t)0x0F00);
-        }
-        else if (processor->IRegister & (uint8_t)0xF0FF == 0xE0A1)
-        {
-            SKNP_ExA1(processor, processor->IRegister & (uint8_t)0x0F00);
+            SHL_8xyE(processor, instruction  & 0x0F00);
         }
     }
-    else if (processor->IRegister & (uint8_t)0xF000 == 0xF000)
+    else if (instruction & 0xF00F == 0x9000)
     {
-        if (processor->IRegister & (uint8_t)0xF000 == 0xF007)
+        SNE_9xy0(processor, instruction  & 0x0F00, instruction  & 0x00F0);
+    }
+    else if (instruction  & 0xF000 == 0xA000)
+    {
+        printf("test_annn\n");
+        LD_Annn(processor, instruction & 0x0FFF);
+    }
+    else if (instruction  & 0xF000 == 0xB000)
+    {
+        JP_Bnnn(processor, instruction  & 0x0FFF);
+    }   
+    else if (instruction  & 0xF000 == 0xC000)
+    {
+        RND_Cxkk(processor, instruction  & 0x0F00, instruction  & 0x00FF);
+    }
+    else if (instruction  & 0xF000 == 0xD000)
+    {
+        printf("test_drw\n");
+        DRW_Dxyn(processor, (instruction  & 0x0F00) >> 8, (instruction  & 0x00F0) >> 4, instruction & 0x000F);
+    }
+    else if (instruction  & 0xF000 == 0xE000)
+    {
+        if (instruction  & 0xF0FF == 0xE09E)
         {
-            LD_Fx07(processor, processor->IRegister & (uint8_t)0x0F00);
+            SKP_Ex9E(processor, instruction  & 0x0F00);
         }
-        else if (processor->IRegister & (uint8_t)0xF0FF == 0xF00A)
+        else if (instruction  & 0xF0FF == 0xE0A1)
         {
-            LD_Fx0A(processor, processor->IRegister & (uint8_t)0x0F00);
+            SKNP_ExA1(processor, instruction  & 0x0F00);
         }
-        else if (processor->IRegister & (uint8_t)0xF0FF == 0xF015)
+    }
+    else if (instruction  & 0xF000 == 0xF000)
+    {
+        if (instruction  & 0xF000 == 0xF007)
         {
-            LD_Fx15(processor, processor->IRegister & (uint8_t)0x0F00);
+            LD_Fx07(processor, instruction  & 0x0F00);
         }
-        else if (processor->IRegister & (uint8_t)0xF0FF == 0xF018)
+        else if (instruction  & 0xF0FF == 0xF00A)
         {
-            LD_Fx18(processor, processor->IRegister & (uint8_t)0x0F00);
+            LD_Fx0A(processor, instruction  & 0x0F00);
         }
-        else if (processor->IRegister & (uint8_t)0xF0FF == 0xF01E)
+        else if (instruction  & 0xF0FF == 0xF015)
         {
-            ADD_Fx1E(processor, processor->IRegister & (uint8_t)0x0F00);
+            LD_Fx15(processor, instruction  & 0x0F00);
         }
-        else if (processor->IRegister & (uint8_t)0xF0FF == 0xF029)
+        else if (instruction  & 0xF0FF == 0xF018)
         {
-            LD_Fx29(processor, processor->IRegister & (uint8_t)0x0F00);
+            LD_Fx18(processor, instruction  & 0x0F00);
         }
-        else if (processor->IRegister & (uint8_t)0xF0FF == 0xF033)
+        else if (instruction  & 0xF0FF == 0xF01E)
         {
-            LD_Fx33(processor, processor->IRegister & (uint8_t)0x0F00);
+            ADD_Fx1E(processor, instruction  & 0x0F00);
         }
-        else if (processor->IRegister & (uint8_t)0xF0FF == 0xF055)
+        else if (instruction  & 0xF0FF == 0xF029)
         {
-            LD_Fx55(processor, processor->IRegister & (uint8_t)0x0F00);
+            LD_Fx29(processor, instruction  & 0x0F00);
         }
-        else if (processor->IRegister & (uint8_t)0xF0FF == 0xF065)
+        else if (instruction  & 0xF0FF == 0xF033)
         {
-            LD_Fx65(processor, processor->IRegister & (uint8_t)0x0F00);
+            LD_Fx33(processor, instruction  & 0x0F00);
+        }
+        else if (instruction  & 0xF0FF == 0xF055)
+        {
+            LD_Fx55(processor, instruction  & 0x0F00);
+        }
+        else if (instruction & 0xF0FF == 0xF065)
+        {
+            LD_Fx65(processor, instruction  & 0x0F00);
         }
     }
 }
