@@ -122,19 +122,15 @@ int ADD_8xy4(struct t_processor* processor, uint8_t x, uint8_t y)
 {
     if (x >= 16 || y >= 16)
         return 1;
-    // Addictionne les valeurs de Vx et Vy
-    uint16_t temp = x + y;
+
+    uint8_t temp = processor->generalRegister[x];
+    // Stocke le résultat dans Vx
+    processor->generalRegister[x] += processor->generalRegister[y];
     // Si le résultat est supérieur à 8 bits (c'est-à-dire > 255), VF est mis à 1, sinon 0
-    if (temp > 255)
-    {
-        // Stocke seulement les 8 bits les plus bas du résultat
-        temp = (temp & 255);
+    if ((temp + processor->generalRegister[y]) > 0xFF)
         processor->generalRegister[15] = 1;
-    }
     else
         processor->generalRegister[15] = 0;
-    // Stocke le résultat dans Vx
-    processor->generalRegister[x] = temp;
     return 0;
 }
 
@@ -142,27 +138,33 @@ int SUB_8xy5(struct t_processor* processor, uint8_t x, uint8_t y)
 {
     if (x >= 16 || y >= 16)
         return 1;
+    
+    uint8_t temp = processor->generalRegister[x];
+    // Soustrait de Vy à Vx et stocke le résultat dans Vx
+    processor->generalRegister[x] -= processor->generalRegister[y];
     // Si Vx > Vy, VF est mis à 1, sinon 0
-    if (processor->generalRegister[x] > processor->generalRegister[y])
+    if (temp     >= processor->generalRegister[y])
         processor->generalRegister[15] = 1;
     else
         processor->generalRegister[15] = 0;
-    // Soustrait de Vy à Vx et stocke le résultat dans Vx
-    processor->generalRegister[x] -= processor->generalRegister[y];
+
     return 0;
 }
+
 
 int SHR_8xy6(struct t_processor* processor, uint8_t x)
 {
     if (x >= 16)
         return 1;
+
+    uint8_t temp = processor->generalRegister[x];
+    // Divise Vx par deux
+    processor->generalRegister[x] >>= 1;
     // Si le bit de poids faible de Vx est égal à 1, VF est mis à 1, sinon 0
-    if ((processor->generalRegister[x] & 1) == 1)
+    if ((temp & 0x01) == 0x01)
         processor->generalRegister[15] = 1;
     else
         processor->generalRegister[15] = 0;
-    // Divise Vx par deux
-    processor->generalRegister[x] /= 1;
     return 0;
 }
 
@@ -170,13 +172,15 @@ int SUBN_8xy7(struct t_processor* processor, uint8_t x, uint8_t y)
 {
     if (x >= 16 || y >= 16)
         return 1;
+
+    uint8_t temp = processor->generalRegister[y];
+    // Vx est soustrait de Vy et le résultat est stocké dans Vx
+    processor->generalRegister[x] = processor->generalRegister[y] - processor->generalRegister[x];
     // Si Vy > Vx, VF est mis à 1, sinon 0
-    if (processor->generalRegister[y] > processor->generalRegister[x])
+    if (temp > processor->generalRegister[x])
         processor->generalRegister[15] = 1;
     else
         processor->generalRegister[15] = 0;
-    // Vx est soustrait de Vy et le résultat est stocké dans Vx
-    processor->generalRegister[x] = processor->generalRegister[y] - processor->generalRegister[x];
     return 0;
 }
 
@@ -185,12 +189,14 @@ int SHL_8xyE(struct t_processor* processor, uint8_t x)
 {
     if (x >= 16)
         return 1;
+
+    uint8_t temp = processor->generalRegister[x];
+    processor->generalRegister[x] <<= 1;
     // Si le bit de poid le plus fort de Vx est égale à 1, met le reste dans VF
-    if ((processor->generalRegister[x] & 0x80) == 1)
+    if ((temp & 0x80) == 0x80)
         processor->generalRegister[15] = 1;
     else
         processor->generalRegister[15] = 0;
-    processor->generalRegister[x] <<= 1;
     return 0;
 }
 
@@ -219,7 +225,7 @@ int RND_Cxkk(struct t_processor* processor, uint8_t x, uint8_t kk)
 {
     if (x >= 16)
         return 1;
-    uint8_t temp = rand() % (kk + 1);
+    uint8_t temp = (uint8_t)(rand() % (kk + 1));
     processor->generalRegister[x] = temp;
     return 0;
 }
@@ -320,11 +326,11 @@ int LD_Fx33(struct t_processor* processor, uint8_t x)
 
     uint8_t temp = processor->generalRegister[x];
 
-    processor->RAM->ram[processor->IRegister] = temp / 100;
+    writeRAM(processor->RAM, processor->IRegister, (temp/100));
     temp %= 100;
-    processor->RAM->ram[processor->IRegister+1] = temp / 10;
+    writeRAM(processor->RAM, processor->IRegister+1, (temp/10));
     temp %= 10;
-    processor->RAM->ram[processor->IRegister+2] = temp;
+    writeRAM(processor->RAM, processor->IRegister+2, temp);
     return 0; 
 }
 
@@ -333,8 +339,8 @@ int LD_Fx55(struct t_processor* processor, uint8_t x)
     if (x >= 16)
         return 1;
 
-    for (unsigned int i = 0 ; i <= x ; i++)
-        processor->RAM->ram[processor->IRegister+i] = processor->generalRegister[i];
+    for (uint16_t i = 0 ; i <= x ; i++)
+        writeRAM(processor->RAM, processor->IRegister+i, processor->generalRegister[i]);
 
     return 0;
 }
@@ -344,8 +350,8 @@ int LD_Fx65(struct t_processor* processor, uint8_t x)
     if (x >= 16)
         return 1;
 
-    for (unsigned int i = 0 ; i <= x ; i++)
-         processor->generalRegister[i] = processor->RAM->ram[processor->IRegister+i];
+    for (uint16_t i = 0 ; i <= x ; i++)
+        processor->generalRegister[i] = readRAM(processor->RAM, (processor->IRegister)+i);
 
     return 0;
 }

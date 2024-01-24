@@ -10,14 +10,14 @@ void manageMachine()
 
     while (fread(&valeur, sizeof(uint8_t), 1, fichier))
     {
-        writeRAM(processor->RAM, 512+i, valeur);
+        writeRAM(processor->RAM, (uint8_t)(512+i), valeur);
         i++;
     }
     processor->programCounter = 512;
 
     while(1)
     {
-        usleep(30000);
+        //usleep(50000);
         fetchDecodeExecute(processor);
         Display_update(processor->display);
         decrementTimer(processor);
