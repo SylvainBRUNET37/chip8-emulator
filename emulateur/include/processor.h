@@ -49,7 +49,7 @@ struct t_processor
     */
     uint16_t stack[nbStackElement];
 
-    /**Speaker
+    /**
     * \brief Compteur de programme (contient l'adresse a executer)
     */
     uint16_t programCounter;

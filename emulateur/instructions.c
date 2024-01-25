@@ -97,6 +97,7 @@ int OR_8xy1(struct t_processor* processor, uint8_t x, uint8_t y)
         return 1;
     // Effectue un OU bit à bit sur les valeurs de Vx et Vy puis stocke le résultat dans Vx
     processor->generalRegister[x] = ((processor->generalRegister[x]) | (processor->generalRegister[y]));
+    processor->generalRegister[15] = 0;
     return 0;
 }
 
@@ -106,6 +107,7 @@ int AND_8xy2(struct t_processor* processor, uint8_t x, uint8_t y)
         return 1;
     // Effectue un ET bit à bit sur les valeurs de Vx et Vy puis stocke le résultat dans Vx.
     processor->generalRegister[x] = ((processor->generalRegister[x]) & (processor->generalRegister[y]));
+    processor->generalRegister[15] = 0;
     return 0;
 }
 
@@ -115,6 +117,7 @@ int XOR_8xy3(struct t_processor* processor, uint8_t x, uint8_t y)
         return 1;
     // Effectue un OU exclusif bit à bit sur les valeurs de Vx et Vy puis stocke le résultat dans Vx.
     processor->generalRegister[x] = ((processor->generalRegister[x]) ^ (processor->generalRegister[y]));
+    processor->generalRegister[15] = 0;
     return 0;
 }
 
@@ -252,9 +255,9 @@ int SKP_Ex9E(struct t_processor* processor, uint8_t x)
 {
     if (x >= 16)
         return 1;
-    uint8_t temp = 0;
-    Keyboard_wait(processor->keyboard, &temp);
-    if (temp == processor->generalRegister[x])
+    unsigned int temp = 0;
+    temp = Keyboard_get(processor->keyboard, processor->generalRegister[x]);
+    if (temp == 1)
         processor->programCounter += 2;
     return 0;
 }
@@ -263,9 +266,9 @@ int SKNP_ExA1(struct t_processor* processor, uint8_t x)
 {
     if (x >= 16)
         return 1;
-    uint8_t temp = 0;
-    Keyboard_wait(processor->keyboard, &temp);
-    if (temp != processor->generalRegister[x])
+    unsigned int temp = 0;
+    temp = Keyboard_get(processor->keyboard, processor->generalRegister[x]);
+    if (temp == 0)
         processor->programCounter += 2;
     return 0;
 }
@@ -351,7 +354,7 @@ int LD_Fx65(struct t_processor* processor, uint8_t x)
         return 1;
 
     for (uint16_t i = 0 ; i <= x ; i++)
-        processor->generalRegister[i] = readRAM(processor->RAM, (processor->IRegister)+i);
+        processor->generalRegister[i] = readRAM(processor->RAM, (processor->IRegister+i));
 
     return 0;
 }

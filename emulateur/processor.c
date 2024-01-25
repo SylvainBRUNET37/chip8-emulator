@@ -89,12 +89,11 @@ void decrementTimer(struct t_processor* processor)
 void fetchDecodeExecute(struct t_processor* processor)
 {
     uint16_t instruction = readRAM(processor->RAM, processor->programCounter);
-    printf("1 : %d\n", instruction);
     instruction = instruction << 8;
     instruction += readRAM(processor->RAM, processor->programCounter+1);
     processor->programCounter += 2;
 
-    printf("2 : %d\n", instruction);
+    //printf("Instruction : %x\n", instruction);
     
     if ((instruction & 0xF000) == 0x0000)
     {
