@@ -7,11 +7,12 @@
 #include <unistd.h>
 #include "processor.h"
 
+#define NB_SPRITE_REPRESENTATIF = 80
+
 /**
  * \file  machine.h
  * \brief Gère l'émulateur
  */
-
 void manageMachine();
 
 #endif

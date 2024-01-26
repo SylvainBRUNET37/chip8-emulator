@@ -375,7 +375,7 @@ int LD_Fx55(struct t_processor* processor, uint8_t x)
 {
     if (x >= 16)
         return 1;
-    // Copie les valeurs des registres V0 à Vx dans la mémoire en commençant à l'adresse I
+    // Copie les valeurs des registres V0 à Vx dans la mémoire en commençant à l'adresse I, et incrémente le registre I à chaque tour de boucle
     for (uint16_t i = 0 ; i <= x ; i++)
     {
         writeRAM(processor->RAM, processor->IRegister, processor->generalRegister[i]);
@@ -388,7 +388,7 @@ int LD_Fx65(struct t_processor* processor, uint8_t x)
 {
     if (x >= 16)
         return 1;
-    // Lit les valeurs de la mémoire à partir de l'emplacement I dans les registres V0 à Vx
+    // Lit les valeurs de la mémoire à partir de l'emplacement I dans les registres V0 à Vx, et incrémente le registre I à chaque tour de boucle
     for (uint16_t i = 0 ; i <= x ; i++)
     {
         processor->generalRegister[i] = readRAM(processor->RAM, processor->IRegister);
