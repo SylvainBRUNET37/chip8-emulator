@@ -14,6 +14,7 @@ void manageMachine()
         i++;
     }
     processor->programCounter = 512;
+    
     unsigned int test = 0;
     while(1)
     {

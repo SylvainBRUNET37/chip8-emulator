@@ -251,17 +251,17 @@ int LD_Fx07(struct t_processor* processor, uint8_t x);
 int LD_Fx0A(struct t_processor* processor, uint8_t x);
 
 /**
- * \brief La valeur de Vx est placée dans ST
+ * \brief La valeur de Vx est placée dans DT
  * \param processor processeur sur lequel faire l'instruction
- * \param x indice du registre où la valeur doit être placer dans ST
+ * \param x indice du registre où la valeur doit être placer dans DT
  * \return 0 si il n'y a pas eu d'erreur, 1 si x superieur à 16
  */
 int LD_Fx15(struct t_processor* processor, uint8_t x);
 
 /**
- * \brief La valeur de Vx est placée dans DT
+ * \brief La valeur de Vx est placée dans ST
  * \param processor processeur sur lequel faire l'instruction
- * \param x indice du registre où la valeur doit être placer dans DT
+ * \param x indice du registre où la valeur doit être placer dans ST
  * \return 0 si il n'y a pas eu d'erreur, 1 si x superieur à 16
  */
 int LD_Fx18(struct t_processor* processor, uint8_t x);
