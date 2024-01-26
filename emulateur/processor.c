@@ -162,7 +162,7 @@ void fetchDecodeExecute(struct t_processor* processor)
         }
         else if ((instruction & 0xF00F) == 0x8006)
         {
-            SHR_8xy6(processor, (instruction & 0x0F00) >> 8);
+            SHR_8xy6(processor, (instruction & 0x0F00) >> 8, (instruction & 0x00F0) >> 4);
         }   
         else if ((instruction & 0xF00F) == 0x8007)
         {
@@ -170,7 +170,7 @@ void fetchDecodeExecute(struct t_processor* processor)
         }
         else if ((instruction & 0xF00F) == 0x800E)
         {
-            SHL_8xyE(processor, (instruction & 0x0F00) >> 8);
+            SHL_8xyE(processor, (instruction & 0x0F00) >> 8, (instruction & 0x00F0) >> 4);
         }
     }
     else if ((instruction & 0xF00F) == 0x9000)

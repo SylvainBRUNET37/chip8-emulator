@@ -9,7 +9,7 @@
       "stopAtEntry": false,
       "externalConsole": false,
       "cwd": "/home/administrateur/Documents/GitHub/ProjetC/emulateur",
-      "program": "/home/administrateur/Documents/GitHub/ProjetC/emulateur/exe",
+      "program": "/home/administrateur/Documents/GitHub/ProjetC/emulateur/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

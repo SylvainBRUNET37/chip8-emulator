@@ -162,15 +162,15 @@ int SUB_8xy5(struct t_processor* processor, uint8_t x, uint8_t y)
 }
 
 
-int SHR_8xy6(struct t_processor* processor, uint8_t x)
+int SHR_8xy6(struct t_processor* processor, uint8_t x, u_int8_t y)
 {
     if (x >= 16)
         return 1;
 
-    // Créé une variable temporaire stockant Vx pour pouvoir étudier son bit de poid faible arpès l'opération
+    // Créé une variable temporaire stockant Vx pour pouvoir étudier son bit de poid faible après l'opération
     uint8_t temp = processor->generalRegister[x];
     // Divise Vx par deux
-    processor->generalRegister[x] >>= 1;
+    processor->generalRegister[x] = processor->generalRegister[y] >> 1;
 
     // Si le bit de poids faible de Vx est égal à 1, VF est mis à 1, sinon 0
     if ((temp & 0x01) == 0x01)
@@ -198,7 +198,7 @@ int SUBN_8xy7(struct t_processor* processor, uint8_t x, uint8_t y)
     return 0;
 }
 
-int SHL_8xyE(struct t_processor* processor, uint8_t x)
+int SHL_8xyE(struct t_processor* processor, uint8_t x, u_int8_t y)
 {
     if (x >= 16)
         return 1;
@@ -206,7 +206,8 @@ int SHL_8xyE(struct t_processor* processor, uint8_t x)
     // Créé une variable temporaire stockant Vx pour pouvoir étudier son poid fort après l'opération
     uint8_t temp = processor->generalRegister[x];
     // Multiplie Vx par 2
-    processor->generalRegister[x] <<= 1;
+    processor->generalRegister[x] = processor->generalRegister[y] << 1;
+
     
     // Si le bit de poid le plus fort de Vx est égale à 1, met le reste dans VF
     if ((temp & 0x80) == 0x80)
@@ -277,7 +278,7 @@ int SKP_Ex9E(struct t_processor* processor, uint8_t x)
 {
     if (x >= 16)
         return 1;
-    unsigned int temp = 0;
+    int temp = 0;
     // Vérifie le clavier et si la touche correspondant à la valeur de Vx est préssée, PC est augmenté de 2
     temp = Keyboard_get(processor->keyboard, processor->generalRegister[x]);
     if (temp == 1)
@@ -289,7 +290,7 @@ int SKNP_ExA1(struct t_processor* processor, uint8_t x)
 {
     if (x >= 16)
         return 1;
-    unsigned int temp = 0;
+    int temp = 0;
     // Vérifie le clavier et si la touche correspondant à la valeur de Vx n'est pas préssée, PC est augmenté de 2
     temp = Keyboard_get(processor->keyboard, processor->generalRegister[x]);
     if (temp == 0)
@@ -389,7 +390,7 @@ int LD_Fx65(struct t_processor* processor, uint8_t x)
 
     // Lit les valeurs de la mémoire à partir de l'emplacement I dans les registres V0 à Vx
     for (uint16_t i = 0 ; i <= x ; i++)
-        processor->generalRegister[i] = readRAM(processor->RAM, (processor->IRegister+i));
+        processor->generalRegister[i] = readRAM(processor->RAM, processor->IRegister+i);
 
     return 0;
 }

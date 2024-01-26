@@ -150,7 +150,7 @@ int SUB_8xy5(struct t_processor* processor, uint8_t x, uint8_t y);
  * \param x indice de la destination et de l'operande 1
  * \return 0 si il n'y a pas eu d'erreur, 1 si x superieur à 16 (donc pas valide)
  */
-int SHR_8xy6(struct t_processor* processor, uint8_t x);
+int SHR_8xy6(struct t_processor* processor, uint8_t x, u_int8_t y);
 
 /**
  * \brief Soustrait la valeur de Vy par la valeur de Vx et stocke le resultat dans Vx
@@ -169,7 +169,7 @@ int SUBN_8xy7(struct t_processor* processor, uint8_t x, uint8_t y);
  * \param x indice de la destination et de l'operande 1
  * \return 0 si il n'y a pas eu d'erreur, 1 si x superieur à 16 (donc pas valide)
  */
-int SHL_8xyE(struct t_processor* processor, uint8_t x);
+int SHL_8xyE(struct t_processor* processor, uint8_t x, u_int8_t y);
 
 /**
  * \brief Si Vx n'est pas égal à Vy, saute la prochaine instruction
