@@ -4,7 +4,7 @@ void manageMachine()
 {
     FILE* fichier;
     uint8_t valeur;
-    fichier = fopen("./rom/5-quirks.ch8", "rb");
+    fichier = fopen("./rom/Worm V4 [RB-Revival Studios, 2007].ch8", "rb");
     struct t_processor* processor = newProcessor();
     u_int16_t i = 0;
 
