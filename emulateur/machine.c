@@ -1,6 +1,7 @@
 #include "./include/machine.h"
 #include <SDL2/SDL.h>
 
+// Déclaration d'un tableau contenant les sprites représentatifs des chiffres hexadécimals
 uint8_t sprite_representatif[NB_SPRITE_REPRESENTATIF] = 
 {
 	0xF0, 0x90, 0x90, 0x90, 0xF0, // 0

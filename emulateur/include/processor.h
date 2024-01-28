@@ -82,7 +82,7 @@ struct t_processor
 
 /**
  * \relates t_processor
- * \brief   alloue en memoire les elements de la structure \ref t_processor donnee en parametre
+ * \brief   Alloue en memoire les elements de la structure \ref t_processor donnee en parametre
  * \param   processor  Processeur de l'emulateur
  * \return  0 si la memoire a bien ete alouee, 1 si elle n'a pas ete allouee
  */
@@ -90,14 +90,14 @@ int initProcessor(struct t_processor* processor);
 
 /**
  * \relates t_processor
- * \brief   librere la memoire des elements de la structure \ref t_processor
+ * \brief   Librere la memoire des elements de la structure \ref t_processor
  * \param   processor  Processeur de l'emulateur
  */
 void destroyProcessor(struct t_processor* processor);
 
 /**
  * \relates t_processor
- * \brief   alloue la memoire pour une structure \ref t_processor ainsi que la memoire pour ses elements
+ * \brief   Alloue la memoire pour une structure \ref t_processor ainsi que la memoire pour ses elements
  * \param   processor  Processeur de l'emulateur
  * \return  0 si la memoire a bien ete alouee, 1 si elle n'a pas ete allouee
  */
@@ -105,22 +105,24 @@ struct t_processor* newProcessor(void);
 
 /**
  * \relates t_processor
- * \brief   librere la memoire de la structure \ref t_processor donnee en parametre
+ * \brief   Librere la memoire de la structure \ref t_processor donnee en parametre
  * \param   processor  Processeur de l'emulateur
  */
 void deleteProcessor(struct t_processor* processor);
 
 /**
  * \relates t_processor
- * \brief   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+ * \brief   Décrémente de 1 le delay timer et le sound timer
  * \param   processor  Processeur de l'emulateur
  */
 void decrementTimer(struct t_processor* processor);
 
 /**
  * \relates t_processor
- * \brief   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
- * \param   processor  Processeur de l'emulateur
+ * \brief   Gère le fetch decode execute et incrémente le programme counter de 2
+ *          Fetch : Va chercher en mémoire à l'adresse du PC l'instruction a exécuter 
+ *          Decode : Décode l'instruction pour savoir laquel c'est et récupère les valeurs utiles pour exécuter l'instruction (x, y, nnn...)
+ *          Execute : Exécute la fonction liée à l'instruction
  */
 void fetchDecodeExecute(struct t_processor* processor);
 
