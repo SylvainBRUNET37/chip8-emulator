@@ -7,12 +7,17 @@
 #include <unistd.h>
 #include "processor.h"
 
-#define NB_SPRITE_REPRESENTATIF = 80 // Taille du tableau des sprites des chiffres hexa
+#define NB_REPRESENTATIVE_SPRITE 80 // Taille du tableau des sprites des chiffres hexa
 
 /**
- * \file  machine.h
- * \brief Gère l'émulateur et charge la ROM en ram
+ * \brief Gère la machine
  */
 void manageMachine();
+
+/**
+ * \brief Charge dans la RAM les sprites représentatifs
+ * \param processor processeur sur lequel faire l'instruction
+ */
+void loadRepresentativeSprite(struct t_processor* processor);
 
 #endif

@@ -2,7 +2,7 @@
 #include <SDL2/SDL.h>
 
 // Déclaration d'un tableau contenant les sprites représentatifs des chiffres hexadécimals
-uint8_t sprite_representatif[NB_SPRITE_REPRESENTATIF] = 
+uint8_t representativeSprite[NB_REPRESENTATIVE_SPRITE] = 
 {
 	0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
 	0x20, 0x60, 0x20, 0x20, 0x70, // 1
@@ -26,8 +26,9 @@ void manageMachine()
 {
     FILE* fichier;
     uint8_t valeur;
-    fichier = fopen("./rom/Worm V4 [RB-Revival Studios, 2007].ch8", "rb");
+    fichier = fopen("./rom/Pong (1 player).ch8", "rb");
     struct t_processor* processor = newProcessor();
+    loadRepresentativeSprite(processor);
     u_int16_t i = 0;
 
     while (fread(&valeur, sizeof(uint8_t), 1, fichier))
@@ -42,7 +43,7 @@ void manageMachine()
     {
         SDL_Delay(2);
         fetchDecodeExecute(processor);
-        if (test == 8)
+        if (test == 1)
         {
             Display_update(processor->display);
             decrementTimer(processor);
@@ -50,4 +51,10 @@ void manageMachine()
         }
         test++;
     }
+}
+
+void loadRepresentativeSprite(struct t_processor* processor)
+{
+    for (uint8_t i = 0 ; i < NB_REPRESENTATIVE_SPRITE ; i++)
+        writeRAM(processor->RAM, i, representativeSprite[i]);
 }

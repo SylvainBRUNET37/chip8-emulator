@@ -349,7 +349,7 @@ int LD_Fx29(struct t_processor* processor, uint8_t x)
     if (x >= 16)
         return 1;
     // La valeur de I est fixée à l'emplacement du sprite correspondant à la valeur de Vx
-    processor->IRegister = processor->generalRegister[x];
+    processor->IRegister = 5*processor->generalRegister[x];
     return 0;
 }
 
