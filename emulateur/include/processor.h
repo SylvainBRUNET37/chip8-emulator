@@ -58,26 +58,6 @@ struct t_processor
     * \brief Pointeur sur le haut de la pile (contient l'adresse du 1er element de la pile)
     */
     uint8_t stackPointer;
-
-    /**
-    * \brief RAM du processeur
-    */
-    struct t_RAM* RAM;
-
-    /**
-    * \brief Emule un écran monochrome 64x32
-    */
-    struct Display* display;
-
-    /**
-    * \brief Emule un haut-parleur monotone (buzzer)
-    */
-    struct Speaker* speaker;
-
-    /**
-    * \brief Emule un clavier à 16 touches
-    */
-    struct Keyboard* keyboard;
 };
 
 /**
@@ -116,14 +96,5 @@ void deleteProcessor(struct t_processor* processor);
  * \param   processor  Processeur de l'emulateur
  */
 void decrementTimer(struct t_processor* processor);
-
-/**
- * \relates t_processor
- * \brief   Gère le fetch decode execute et incrémente le programme counter de 2
- *          Fetch : Va chercher en mémoire à l'adresse du PC l'instruction a exécuter 
- *          Decode : Décode l'instruction pour savoir laquel c'est et récupère les valeurs utiles pour exécuter l'instruction (x, y, nnn...)
- *          Execute : Exécute la fonction liée à l'instruction
- */
-void fetchDecodeExecute(struct t_processor* processor);
 
 #endif
