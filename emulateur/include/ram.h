@@ -3,7 +3,7 @@
 
 /**
  * \file  ram.h
- * \brief Contient les declarations de la structure \ref t_RAM et des fonctions qui lui sont liee
+ * \brief Contient la declarations de la structure \ref t_RAM et des fonctions qui lui sont liee
  */
 
 #include <stdio.h>

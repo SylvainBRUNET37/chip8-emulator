@@ -1,10 +1,10 @@
-#ifndef PROCESSOR_H
-#define PROCESSOR_H
-
 /**
  * \file  processor.h
- * \brief Contient les declarations de la structure \ref t_processor et des fonctions qui lui sont liee
+ * \brief Contient la declarations de la structure \ref t_processor et des fonctions qui lui sont liee
  */
+
+#ifndef PROCESSOR_H
+#define PROCESSOR_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -60,26 +60,19 @@ struct t_processor
     uint8_t stackPointer;
 };
 
-/**
- * \relates t_processor
- * \brief   Alloue en memoire les elements de la structure \ref t_processor donnee en parametre
- * \param   processor  Processeur de l'emulateur
- * \return  0 si la memoire a bien ete alouee, 1 si elle n'a pas ete allouee
- */
-int initProcessor(struct t_processor* processor);
 
 /**
  * \relates t_processor
- * \brief   Librere la memoire des elements de la structure \ref t_processor
- * \param   processor  Processeur de l'emulateur
+ * \brief   Met à 0 tous les élements de la structure \ref t_processor. 
+ *          Cette fonction remplace init et destroy car il n'y a pas d'allocation à faire ou de mémoire à libérer
+ * \param   processor Processeur de l'emulateur à (ré)initialiser
  */
-void destroyProcessor(struct t_processor* processor);
+void resetProcessor(struct t_processor* processor)
 
 /**
  * \relates t_processor
- * \brief   Alloue la memoire pour une structure \ref t_processor ainsi que la memoire pour ses elements
- * \param   processor  Processeur de l'emulateur
- * \return  0 si la memoire a bien ete alouee, 1 si elle n'a pas ete allouee
+ * \brief   Alloue la memoire pour une structure \ref t_processor ainsi que la memoire pour ses élements
+ * \return  la structure allouée ou NULL si l'allocation n'a pas pu être faites
  */
 struct t_processor* newProcessor(void);
 

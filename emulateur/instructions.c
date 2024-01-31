@@ -1,28 +1,25 @@
 #include "./include/instructions.h"
 
-int CLS_00E0(struct t_processor* processor)
+void CLS_00E0(struct Display* display)
 {
-    Display_CLS(processor->display);
-    return 0;
+    Display_CLS(display);
 }
 
-int RET_00EE(struct t_processor* processor)
+void RET_00EE(struct t_processor* processor)
 {
     // Place le compteur de programme à l'adresse du sommet de la pile
     processor->programCounter = processor->stack[processor->stackPointer];
     // Soustrait 1 au pointeur de pile
     processor->stackPointer--;
-    return 0;
 }
 
-int JP_1nnn(struct t_processor* processor, uint16_t nnn)
+void JP_1nnn(struct t_processor* processor, uint16_t nnn)
 {
     // Met le compteur de programme à nnn
     processor->programCounter = nnn;
-    return 0;
 }
 
-int CALL_2nnn(struct t_processor* processor, uint16_t nnn)
+void CALL_2nnn(struct t_processor* processor, uint16_t nnn)
 {
     // Ajoute 1 au pointeur de pile
     processor->stackPointer++;
@@ -30,14 +27,12 @@ int CALL_2nnn(struct t_processor* processor, uint16_t nnn)
     processor->stack[processor->stackPointer] = processor->programCounter;
     // Le PC est mis à nnn
     processor->programCounter = nnn;
-    return 0;
 }
 
 int SE_3xkk(struct t_processor* processor, uint8_t x, uint8_t kk)
 {
     if (x >= 16)
         return 1;
-
     // Compare les registres Vx et kk et s'ils sont égaux, incrémente le compteur de programme de 2    
     if (processor->generalRegister[x] == kk)
         processor->programCounter += 2;
@@ -227,18 +222,16 @@ int SNE_9xy0(struct t_processor* processor, uint8_t x, uint8_t y)
     return 0;
 }
 
-int LD_Annn(struct t_processor* processor, uint16_t nnn)
+void LD_Annn(struct t_processor* processor, uint16_t nnn)
 {
     // Fixe la valeur du registre I à nnn
     processor->IRegister = nnn;
-    return 0;
 }
 
-int JP_Bnnn(struct t_processor* processor, uint16_t nnn)
+void JP_Bnnn(struct t_processor* processor, uint16_t nnn)
 {
     // Le compteur de programme est réglé sur nnn plus la valeur de V0
     processor->programCounter = nnn + processor->generalRegister[0];
-    return 0;
 }
 
 int RND_Cxkk(struct t_processor* processor, uint8_t x, uint8_t kk)
@@ -252,7 +245,7 @@ int RND_Cxkk(struct t_processor* processor, uint8_t x, uint8_t kk)
     return 0;
 }
 
-int DRW_Dxyn(struct t_processor* processor, uint8_t x, uint8_t y, uint8_t n)
+int DRW_Dxyn(struct t_processor* processor, struct t_ram* RAM, struct Display* display, uint8_t x, uint8_t y, uint8_t n)
 {
     if (x >= 16 || y >= 16 || n >= 16)
         return 1;
@@ -263,36 +256,36 @@ int DRW_Dxyn(struct t_processor* processor, uint8_t x, uint8_t y, uint8_t n)
     // Lit n octets en mémoire à partir de l'adresse stockée dans I et ajoute
     for (unsigned int i = 0 ; i < n ; i++)
     {
-        temp = processor->RAM->ram[processor->IRegister+i];
+        temp = readRAM(RAM, processor->IRegister+i);
         // Ajoute l'octet au sprite
         Sprite_add(&sprite, temp);
     }
     // Affiche le sprite aux coordonnées (Vx, Vy)
-    Display_DRW(processor->display, &sprite, processor->generalRegister[x], processor->generalRegister[y], &processor->generalRegister[15]);
+    Display_DRW(display, &sprite, processor->generalRegister[x], processor->generalRegister[y], &processor->generalRegister[15]);
 
     Sprite_destroy(&sprite);
     return 0;
 }
 
-int SKP_Ex9E(struct t_processor* processor, uint8_t x)
+int SKP_Ex9E(struct t_processor* processor, struct Keyboard* keyboard, uint8_t x)
 {
     if (x >= 16)
         return 1;
     int temp = 0;
     // Vérifie le clavier et si la touche correspondant à la valeur de Vx est préssée, PC est augmenté de 2
-    temp = Keyboard_get(processor->keyboard, processor->generalRegister[x]);
+    temp = Keyboard_get(keyboard, processor->generalRegister[x]);
     if (temp == 1)
         processor->programCounter += 2;
     return 0;
 }
 
-int SKNP_ExA1(struct t_processor* processor, uint8_t x)
+int SKNP_ExA1(struct t_processor* processor, struct Keyboard* keyboard, uint8_t x)
 {
     if (x >= 16)
         return 1;
     int temp = 0;
     // Vérifie le clavier et si la touche correspondant à la valeur de Vx n'est pas préssée, PC est augmenté de 2
-    temp = Keyboard_get(processor->keyboard, processor->generalRegister[x]);
+    temp = Keyboard_get(keyboard, processor->generalRegister[x]);
     if (temp == 0)
         processor->programCounter += 2;
     return 0;
@@ -307,7 +300,7 @@ int LD_Fx07(struct t_processor* processor, uint8_t x)
     return 0;
 }
 
-int LD_Fx0A(struct t_processor* processor, uint8_t x)
+int LD_Fx0A(struct t_processor* processor, struct Keyboard* keyboard, uint8_t x)
 {
     if (x >= 16)
         return 1;
@@ -371,20 +364,20 @@ int LD_Fx33(struct t_processor* processor, uint8_t x)
     return 0; 
 }
 
-int LD_Fx55(struct t_processor* processor, uint8_t x)
+int LD_Fx55(struct t_processor* processor, struct t_ram RAM, uint8_t x)
 {
     if (x >= 16)
         return 1;
     // Copie les valeurs des registres V0 à Vx dans la mémoire en commençant à l'adresse I, et incrémente le registre I à chaque tour de boucle
     for (uint16_t i = 0 ; i <= x ; i++)
     {
-        writeRAM(processor->RAM, processor->IRegister, processor->generalRegister[i]);
+        writeRAM(RAM, processor->IRegister, processor->generalRegister[i]);
         processor->IRegister += 1;
     }
     return 0;
 }
 
-int LD_Fx65(struct t_processor* processor, uint8_t x)
+int LD_Fx65(struct t_processor* processor, struct t_ram RAM, uint8_t x)
 {
     if (x >= 16)
         return 1;
