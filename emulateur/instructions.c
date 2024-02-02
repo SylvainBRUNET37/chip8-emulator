@@ -245,7 +245,7 @@ int RND_Cxkk(struct t_processor* processor, uint8_t x, uint8_t kk)
     return 0;
 }
 
-int DRW_Dxyn(struct t_processor* processor, struct t_ram* RAM, struct Display* display, uint8_t x, uint8_t y, uint8_t n)
+int DRW_Dxyn(struct t_processor* processor, struct t_RAM* RAM, struct Display* display, uint8_t x, uint8_t y, uint8_t n)
 {
     if (x >= 16 || y >= 16 || n >= 16)
         return 1;
@@ -254,7 +254,7 @@ int DRW_Dxyn(struct t_processor* processor, struct t_ram* RAM, struct Display* d
     struct Sprite sprite;
     Sprite_init(&sprite,n);
     // Lit n octets en mémoire à partir de l'adresse stockée dans I et ajoute
-    for (unsigned int i = 0 ; i < n ; i++)
+    for (uint16_t i = 0 ; i < n ; i++)
     {
         temp = readRAM(RAM, processor->IRegister+i);
         // Ajoute l'octet au sprite
@@ -305,7 +305,7 @@ int LD_Fx0A(struct t_processor* processor, struct Keyboard* keyboard, uint8_t x)
     if (x >= 16)
         return 1;
     // Toute exécution s'arrête jusqu'à ce qu'une touche soit pressée, puis la valeur de cette touche est stockée dans Vx
-    Keyboard_wait(processor->keyboard, &processor->generalRegister[x]);
+    Keyboard_wait(keyboard, &processor->generalRegister[x]);
     return 0;
 }
 
@@ -346,7 +346,7 @@ int LD_Fx29(struct t_processor* processor, uint8_t x)
     return 0;
 }
 
-int LD_Fx33(struct t_processor* processor, uint8_t x)
+int LD_Fx33(struct t_processor* processor, struct t_RAM* RAM, uint8_t x)
 {
     if (x >= 16)
         return 1;
@@ -354,17 +354,17 @@ int LD_Fx33(struct t_processor* processor, uint8_t x)
     uint8_t temp = processor->generalRegister[x];
 
     // Prend la valeur décimale de Vx et place le chiffre des centaines en mémoire à l'emplacement I
-    writeRAM(processor->RAM, processor->IRegister, (temp/100));
+    writeRAM(RAM, processor->IRegister, (temp/100));
     temp %= 100;
     // Fait la même chose avec le chiffre des dixaines
-    writeRAM(processor->RAM, processor->IRegister+1, (temp/10));
+    writeRAM(RAM, processor->IRegister+1, (temp/10));
     temp %= 10;
     // Fait la même chose avec le chiffre des unités
-    writeRAM(processor->RAM, processor->IRegister+2, temp);
+    writeRAM(RAM, processor->IRegister+2, temp);
     return 0; 
 }
 
-int LD_Fx55(struct t_processor* processor, struct t_ram RAM, uint8_t x)
+int LD_Fx55(struct t_processor* processor, struct t_RAM* RAM, uint8_t x)
 {
     if (x >= 16)
         return 1;
@@ -377,14 +377,14 @@ int LD_Fx55(struct t_processor* processor, struct t_ram RAM, uint8_t x)
     return 0;
 }
 
-int LD_Fx65(struct t_processor* processor, struct t_ram RAM, uint8_t x)
+int LD_Fx65(struct t_processor* processor, struct t_RAM* RAM, uint8_t x)
 {
     if (x >= 16)
         return 1;
     // Lit les valeurs de la mémoire à partir de l'emplacement I dans les registres V0 à Vx, et incrémente le registre I à chaque tour de boucle
     for (uint16_t i = 0 ; i <= x ; i++)
     {
-        processor->generalRegister[i] = readRAM(processor->RAM, processor->IRegister);
+        processor->generalRegister[i] = readRAM(RAM, processor->IRegister);
         processor->IRegister += 1;
     }
     return 0;

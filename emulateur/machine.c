@@ -9,7 +9,7 @@ int main()
         return 1;
 
     unsigned short timerCounter = 0;
-    unsigned short error = 0;
+    int error = 0;
     while(1)
     {
         // Endort le programme pendant 2ms pour que le fetch/decode/execute se lance 500 fois par seconde (500Hz)
@@ -23,7 +23,6 @@ int main()
         else if (error == 2)
         {
             printf("L'instruction recuperee n'est pas valide.\n");
-            return 1;
         }
             
         // Tous les 8 tours de boucle (fréquence : (500/8)Hz ~= 60Hz), décrémente les timers et met à jour l'affichage
@@ -39,11 +38,19 @@ int main()
         }
         timerCounter++;
     }
+    SDL_Quit();
     return 0;
 }
 
 struct t_machine* initEmu()
 {
+    // Initialisation la vidéo et l'audio
+    if((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) == -1)) 
+    { 
+        printf("Impossible d'initialiser la SDL : %s.\n", SDL_GetError());
+        return NULL;
+    }
+
     // Créé et initialise l'émulateur
     struct t_machine* machine = newMachine();
     if (machine == NULL)
@@ -57,12 +64,10 @@ struct t_machine* initEmu()
     
     // Demande à l'utilisateur quel ROM il veut lancer
     char* romPath = searchRomName();
-    if (romPath == "")
-        return NULL;
     
     // Charge en RAM la ROM et les sprites représentatifs
-    loadRepresentativeSprite(machine->processor, romPath);
-    loadRom(machine->processor);
+    loadRepresentativeSprite(machine->RAM);
+    loadRom(machine->RAM, romPath);
 
     return machine;
 }
@@ -90,16 +95,7 @@ char* searchRomName()
             }
         }
         closedir(directory);
-
-        // Si au moins une ROM a été trouvée, demande à l'utilisateur laquel il veut choisir
-        if (romName[0] != "")
-            return askRom(romName, nbFile)
-        // Sinon affiche un message d'erreur
-        else
-        {
-            printf("Aucune rom se trouve dans le dossier ROM.\n");
-            return "";
-        }
+        return askRom(romName, nbFile);
     }
     // Affiche un message d'erreur si le répertoire n'a pas pu être ouvert
     else
@@ -113,18 +109,24 @@ char* searchRomName()
 char* askRom(char* romName[50], unsigned int nbFile)
 {
     unsigned int romNumber = 0;
-    char* romPath = "./rom/";
+    char romPath[150];
+    // Initialiser le début du chemin
+    strcpy(romPath, "./rom/");
+    
+    // Demande à l'utilisateur le numéro de la ROM qu'il veut lancer
     do
     {
         printf("Saisissez le numero de la rom que vous voulez lancer : ");
-        scanf("%d", &romNumber);
-        romNumber--;
-    }
-    while (romNumber < 1 || romNumber > nbFile);
-    strcat(romPath, romName[romNumber]);
-        
-    return romPath;
+        scanf("%u", &romNumber);
+    } while (romNumber < 1 || romNumber > nbFile);
+
+    // Concatene le début du chemin (./rom/) avec le nom de la ROM
+    strncat(romPath, romName[romNumber-1], sizeof(romPath)-strlen(romPath)-1);
+
+    // Retourner une copie allouée dynamiquement
+    return strdup(romPath);
 }
+
 
 int initMachine(struct t_machine* machine)
 {
@@ -146,8 +148,13 @@ int initMachine(struct t_machine* machine)
     // Initialise le display, le speaker et le keyboard
     if (Display_init(machine->display, 10) == 1)
         return 1;
+        
     if (Speaker_init(machine->speaker) == 1)
+    {
+        printf("%s\n", SDL_GetError());
         return 1;
+    }
+        
     if (Keyboard_init(machine->keyboard) == 1)
         return 1;
 
@@ -175,7 +182,7 @@ void destroyMachine(struct t_machine* machine)
         free(machine->RAM);
 
         // Détruit et libère le processeur
-        deleteProcessor(machine->processor):
+        deleteProcessor(machine->processor);
         free(machine->processor);
     }
 }
@@ -183,7 +190,7 @@ void destroyMachine(struct t_machine* machine)
 struct t_machine* newMachine()
 {
     // Alloue en mémoire la structure
-    struct t_machine* machine = malloc(sizeof(struct machine));
+    struct t_machine* machine = malloc(sizeof(struct t_machine));
     if (machine == NULL)
         return NULL;
     // Initialise la structure
@@ -202,7 +209,7 @@ void deleteMachine(struct t_machine* machine)
     }
 }
 
-void loadRepresentativeSprite(struct t_processor* processor)
+void loadRepresentativeSprite(struct t_RAM* RAM)
 {
     // Déclaration d'un tableau contenant les sprites représentatifs des chiffres hexadécimaux
     uint8_t representativeSprite[NB_REPRESENTATIVE_SPRITE] = 
@@ -227,10 +234,10 @@ void loadRepresentativeSprite(struct t_processor* processor)
     
     // Écrit dans la RAM les réprésentation hexa des sprites dans les NB_REPRESENTATIVE_SPRITE premiers emplacements
     for (uint8_t i = 0 ; i < NB_REPRESENTATIVE_SPRITE ; i++)
-        writeRAM(processor->RAM, i, representativeSprite[i]);
+        writeRAM(RAM, i, representativeSprite[i]);
 }
 
-void loadRom(struct t_processor* processor, char* romPath)
+void loadRom(struct t_RAM* RAM, char* romPath)
 {
     FILE* file;
     uint8_t value;
@@ -242,7 +249,7 @@ void loadRom(struct t_processor* processor, char* romPath)
     // Charge la ROM dans la RAM à partir de l'adresse 512 (tant que le fichier n'est pas fini)
     while (fread(&value, sizeof(uint8_t), 1, file))
     {
-        writeRAM(processor->RAM, (512+i), value);
+        writeRAM(RAM, (512+i), value);
         i++;
     }
 }
@@ -251,11 +258,11 @@ int fetchDecodeExecute(struct t_machine* machine)
 {
     // FETCH :
     // Récupère dans la RAM les 8 premiers bits de l'instruction
-    uint16_t instruction = readRAM(processor->RAM, processor->programCounter);
+    uint16_t instruction = readRAM(machine->RAM, machine->processor->programCounter);
     // Décale les 8 bits récupéré vers la gauche
     instruction = instruction << 8;
     // Récupère dans la RAM les 8 derniers bits
-    instruction += readRAM(processor->RAM, processor->programCounter+1);
+    instruction += readRAM(machine->RAM, machine->processor->programCounter+1);
     
     // DECODE/EXECUTE : 
     // - les conditions dans les "if / else if" vérifient quel instruction a été récupérée en RAM
@@ -353,11 +360,11 @@ int fetchDecodeExecute(struct t_machine* machine)
     }
     else if ((instruction & 0xF000) == 0xA000)
     {
-        LD_Annn(machine->processor, (instruction & 0x0FFF))
+        LD_Annn(machine->processor, (instruction & 0x0FFF));
     }
     else if ((instruction  & 0xF000) == 0xB000)
     {
-        JP_Bnnn(machine->processor, (instruction & 0x0FFF))
+        JP_Bnnn(machine->processor, (instruction & 0x0FFF));
     }   
     else if ((instruction  & 0xF000) == 0xC000)
     {
@@ -411,7 +418,7 @@ int fetchDecodeExecute(struct t_machine* machine)
     }
     else if ((instruction & 0xF0FF) == 0xF033)
     {
-        if (LD_Fx33(machine->processor, (instruction & 0x0F00) >> 8) == 1)
+        if (LD_Fx33(machine->processor, machine->RAM, (instruction & 0x0F00) >> 8) == 1)
             return 1;
     }
     else if ((instruction & 0xF0FF) == 0xF055)
@@ -426,6 +433,7 @@ int fetchDecodeExecute(struct t_machine* machine)
     }
     else
     {
+        printf("Inctruction : %x\n", instruction);
         return 2;
     }
 

@@ -60,14 +60,13 @@ struct t_processor
     uint8_t stackPointer;
 };
 
-
 /**
  * \relates t_processor
  * \brief   Met à 0 tous les élements de la structure \ref t_processor. 
  *          Cette fonction remplace init et destroy car il n'y a pas d'allocation à faire ou de mémoire à libérer
  * \param   processor Processeur de l'emulateur à (ré)initialiser
  */
-void resetProcessor(struct t_processor* processor)
+void resetProcessor(struct t_processor* processor);
 
 /**
  * \relates t_processor

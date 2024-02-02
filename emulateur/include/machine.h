@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <unistd.h>
 #include "processor.h"
+#include "instructions.h"
 
 #define NB_REPRESENTATIVE_SPRITE 80 // Taille du tableau des sprites des chiffres hexa
 
@@ -47,10 +48,13 @@ struct t_machine
     struct Keyboard* keyboard;
 };
 
-struct t_machine* initEmu()
-{
-
-}
+/**
+ * \relates t_machine
+ * \brief   Alloue en memoire les elements de la structure \ref t_machine donnee en parametre
+ * \param   machine emulateur a initialiser
+ * \return  0 si la memoire a bien ete alouee, 1 si elle n'a pas ete allouee
+ */
+struct t_machine* initEmu();
 
 /**
  * \relates t_machine
@@ -91,20 +95,20 @@ char* askRom(char* romName[50], unsigned int nbFile);
  * \brief Cherche dans le dossier ROM le nom des ROMs
  * \return le nom de la rom choisi par l'utlisateur ou "" si il y a une erreur (return le return de \ref askRom)
  */
-char* searchRomName()
+char* searchRomName();
 
 /**
  * \brief Charge dans la RAM les sprites représentatifs
  * \param processor structure dans laquel se trouve la RAM
  */
-void loadRepresentativeSprite(struct t_processor* processor);
+void loadRepresentativeSprite(struct t_RAM* RAM);
 
 /**
  * \brief Charge dans la RAM la ROM
  * \param processor structure dans laquel se trouve la RAM
  * \param romPath chemin vers la ROM à lancer
  */
-void loadRom(struct t_processor* processor, char* romPath);
+void loadRom(struct t_RAM* RAM, char* romPath);
 
 /**
  * \brief Gère le fetch decode execute et incrémente le programme counter de 2

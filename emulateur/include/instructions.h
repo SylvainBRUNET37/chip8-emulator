@@ -214,7 +214,7 @@ int RND_Cxkk(struct t_processor* processor, uint8_t x, uint8_t kk);
  * \param n nombre d'octets à lire à partir de l'adresse stockée dans le registre I
  * \return 0 si il n'y a pas eu d'erreur, 1 si x, y et/ou z superieur à 16
  */
-int DRW_Dxyn(struct t_processor* processor, struct t_ram* RAM, struct Display* display, uint8_t x, uint8_t y, uint8_t n);
+int DRW_Dxyn(struct t_processor* processor, struct t_RAM* RAM, struct Display* display, uint8_t x, uint8_t y, uint8_t n);
 
 /**
  * \brief Sauter l'instruction suivante si la touche ayant la valeur Vx est enfoncée
@@ -290,7 +290,7 @@ int LD_Fx29(struct t_processor* processor, uint8_t x);
  * \param x indice de la valeur de Vx
  * \return 0 si il n'y a pas eu d'erreur, 1 si x superieur à 16
  */
-int LD_Fx33(struct t_processor* processor, uint8_t x);
+int LD_Fx33(struct t_processor* processor, struct t_RAM* RAM, uint8_t x);
 
 /**
  * \brief Copie les valeurs des registres V0 à Vx dans la mémoire, à partir de l'adresse I
@@ -298,7 +298,7 @@ int LD_Fx33(struct t_processor* processor, uint8_t x);
  * \param x indice de la valeur de Vx
  * \return 0 si il n'y a pas eu d'erreur, 1 si x superieur à 16
  */
-int LD_Fx55(struct t_processor* processor, struct t_ram RAM, uint8_t x);
+int LD_Fx55(struct t_processor* processor, struct t_RAM* RAM, uint8_t x);
 
 /**
  * \brief Lit les valeurs de la mémoire à partir de l'emplacement I dans les registres V0 à Vx
@@ -306,6 +306,6 @@ int LD_Fx55(struct t_processor* processor, struct t_ram RAM, uint8_t x);
  * \param x indice de la valeur de Vx
  * \return 0 si il n'y a pas eu d'erreur, 1 si x superieur à 16
  */
-int LD_Fx65(struct t_processor* processor, struct t_ram RAM, uint8_t x);
+int LD_Fx65(struct t_processor* processor, struct t_RAM* RAM, uint8_t x);
 
 #endif
