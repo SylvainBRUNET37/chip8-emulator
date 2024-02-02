@@ -257,13 +257,12 @@ void loadRom(struct t_RAM* RAM, char* romPath)
 int fetchDecodeExecute(struct t_machine* machine)
 {
     // FETCH :
-    // Récupère dans la RAM les 8 premiers bits de l'instruction
+    // Récupère dans la RAM les 8 premiers bits de l'instruction, décale les 8 bits récupéré vers la gauche puis récupère dans la RAM les 8 derniers bits
     uint16_t instruction = readRAM(machine->RAM, machine->processor->programCounter);
-    // Décale les 8 bits récupéré vers la gauche
     instruction = instruction << 8;
-    // Récupère dans la RAM les 8 derniers bits
     instruction += readRAM(machine->RAM, machine->processor->programCounter+1);
-    
+    machine->processor->programCounter += 2;
+
     // DECODE/EXECUTE : 
     // - les conditions dans les "if / else if" vérifient quel instruction a été récupérée en RAM
     // - les valeurs de x (et y) sont décalée de 8 (et 4) bits pour avoir leur valeur sur 4 bits
@@ -433,11 +432,8 @@ int fetchDecodeExecute(struct t_machine* machine)
     }
     else
     {
-        printf("Inctruction : %x\n", instruction);
+        printf("Inctruction : %x non reconnue.\n", instruction);
         return 2;
     }
-
-    // Incrémente le compteur de programme
-    machine->processor->programCounter += 2;
     return 0;
 }

@@ -25,7 +25,7 @@
 /**
  * \brief Implements a CHIP 8 sprite.
  *
- * A spriter is a vector of bytes representing a picture.
+ * A sprite is a vector of bytes representing a picture.
  *
  * A struct Sprite variable shall be initialized and destroyed using the
  * Sprite_init and Sprite_destroy functions, respectively.
@@ -92,7 +92,7 @@ size_t Sprite_length (const struct Sprite* sprite);
  * \return   0 on success, 1 in case of an error (\ref errcode is set to indicate the error).
  *
  * Errors:
- *   - RANGE: out of range (i is not in [O..length[).
+ *   - RANGE: out of range (\p i is not in [O..length[).
  */
 int Sprite_get (const struct Sprite* sprite, size_t i, uint8_t* value);
 

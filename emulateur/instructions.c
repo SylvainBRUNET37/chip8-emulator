@@ -271,10 +271,12 @@ int SKP_Ex9E(struct t_processor* processor, struct Keyboard* keyboard, uint8_t x
 {
     if (x >= 16)
         return 1;
-    int temp = 0;
+    int state = 0;
     // Vérifie le clavier et si la touche correspondant à la valeur de Vx est préssée, PC est augmenté de 2
-    temp = Keyboard_get(keyboard, processor->generalRegister[x]);
-    if (temp == 1)
+    int error = Keyboard_get(keyboard, processor->generalRegister[x], &state);
+    if (error == 1)
+        return 1;
+    if (state == 1)
         processor->programCounter += 2;
     return 0;
 }
@@ -283,10 +285,12 @@ int SKNP_ExA1(struct t_processor* processor, struct Keyboard* keyboard, uint8_t 
 {
     if (x >= 16)
         return 1;
-    int temp = 0;
+    int state = 0;
     // Vérifie le clavier et si la touche correspondant à la valeur de Vx n'est pas préssée, PC est augmenté de 2
-    temp = Keyboard_get(keyboard, processor->generalRegister[x]);
-    if (temp == 0)
+    int error = Keyboard_get(keyboard, processor->generalRegister[x], &state);
+    if (error == 1)
+        return 1;
+    if (state == 0)
         processor->programCounter += 2;
     return 0;
 }

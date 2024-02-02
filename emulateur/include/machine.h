@@ -50,7 +50,7 @@ struct t_machine
 
 /**
  * \relates t_machine
- * \brief   Alloue en memoire les elements de la structure \ref t_machine donnee en parametre
+ * \brief   Initialise ce qui est nécessaire pour que l'émulateur se lance
  * \param   machine emulateur a initialiser
  * \return  0 si la memoire a bien ete alouee, 1 si elle n'a pas ete allouee
  */

@@ -67,14 +67,20 @@ void Keyboard_destroy (struct Keyboard* keyboard);
 
 /**
  * \memberof Keyboard
- * \brief    Returns the current state of a keyboard.
+ * \brief    Retrieves the current state of a keyboard.
  * \param    keyboard The keyboard to be observed.
  * \param    key      The key      to be observed.
- * \return   KEY_DOWN if the corresponding key is pressed, KEY_UP otherwise.
+ * \param    state    The location where the state code is to be stored
+ *                      (KEY_DOWN if \p key is being pressed, KEY_UP otherwise).
+ * \return   0 on success, 1 in case of an error (\ref errcode is set to indicate the error).
  *
- * If \p key is out of the range (not in [0..16[), KEY_UP is returned.
+ * In case of an error, \p *state is neither accessed, nor modified.
+ *
+ * Errors:
+ *   - QUIT:  quit event;
+ *   - RANGE: out of range (\p key is not in [0..15]).
  */
-int Keyboard_get (const struct Keyboard* keyboard, uint8_t key);
+int Keyboard_get (const struct Keyboard* keyboard, uint8_t key, int* state);
 
 #define KEY_UP   0
 #define KEY_DOWN 1
@@ -84,7 +90,7 @@ int Keyboard_get (const struct Keyboard* keyboard, uint8_t key);
  * \brief    Waits for any key to be pressed.
  * \param    keyboard The keyboard to be observed.
  * \param    pressed  The location where the key pressed is to be stored.
- * \return   The key pressed.
+ * \return   0 on success, 1 in case of an error (\ref errcode is set to indicate the error).
  *
  * This function is blocking.
  *

@@ -31,7 +31,7 @@
  *   - QUIT:     quit event;
  *   - MALLOC:   out of memory;
  *   - SEGFAULT: segmentation fault;
- *   - RANGE:    index is out of range;
+ *   - RANGE:    an index is out of range;
  *   - SDL:      a SDL function has failed; call SDL_GetError() for more information;
  *   - STACK:    invalid operation on the call stack;
  *   - OPCODE:   unknown instruction;
