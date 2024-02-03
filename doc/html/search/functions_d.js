@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['se_5f3xkk_0',['SE_3xkk',['../instructions_8h.html#a40956c88b72ae73a5237d9773a20a632',1,'SE_3xkk(struct t_processor *processor, uint8_t x, uint8_t kk):&#160;instructions.c'],['../instructions_8c.html#a40956c88b72ae73a5237d9773a20a632',1,'SE_3xkk(struct t_processor *processor, uint8_t x, uint8_t kk):&#160;instructions.c']]],
+  ['se_5f5xy0_1',['SE_5xy0',['../instructions_8h.html#ae904468c494294bea8b8b5070b9488a5',1,'SE_5xy0(struct t_processor *processor, uint8_t x, uint8_t y):&#160;instructions.c'],['../instructions_8c.html#ae904468c494294bea8b8b5070b9488a5',1,'SE_5xy0(struct t_processor *processor, uint8_t x, uint8_t y):&#160;instructions.c']]],
+  ['searchromname_2',['searchRomName',['../rom_8h.html#a8d58f2068c30c48502581f85802c421e',1,'searchRomName():&#160;rom.c'],['../rom_8c.html#a8d58f2068c30c48502581f85802c421e',1,'searchRomName():&#160;rom.c']]],
+  ['shl_5f8xye_3',['SHL_8xyE',['../instructions_8h.html#af44704b056c3dd2822a421df77aa9ba1',1,'SHL_8xyE(struct t_processor *processor, uint8_t x, u_int8_t y):&#160;instructions.c'],['../instructions_8c.html#af44704b056c3dd2822a421df77aa9ba1',1,'SHL_8xyE(struct t_processor *processor, uint8_t x, u_int8_t y):&#160;instructions.c']]],
+  ['shr_5f8xy6_4',['SHR_8xy6',['../instructions_8h.html#a9f39195e5743fc88fb2cb84d209586ab',1,'SHR_8xy6(struct t_processor *processor, uint8_t x, u_int8_t y):&#160;instructions.c'],['../instructions_8c.html#a9f39195e5743fc88fb2cb84d209586ab',1,'SHR_8xy6(struct t_processor *processor, uint8_t x, u_int8_t y):&#160;instructions.c']]],
+  ['sknp_5fexa1_5',['SKNP_ExA1',['../instructions_8h.html#a4435c6d8afa2b46d85d7cb1d1c409a46',1,'SKNP_ExA1(struct t_processor *processor, struct Keyboard *keyboard, uint8_t x):&#160;instructions.c'],['../instructions_8c.html#a4435c6d8afa2b46d85d7cb1d1c409a46',1,'SKNP_ExA1(struct t_processor *processor, struct Keyboard *keyboard, uint8_t x):&#160;instructions.c']]],
+  ['skp_5fex9e_6',['SKP_Ex9E',['../instructions_8h.html#a311ff149f38de3f6fb8aab4e843b2d41',1,'SKP_Ex9E(struct t_processor *processor, struct Keyboard *keyboard, uint8_t x):&#160;instructions.c'],['../instructions_8c.html#a311ff149f38de3f6fb8aab4e843b2d41',1,'SKP_Ex9E(struct t_processor *processor, struct Keyboard *keyboard, uint8_t x):&#160;instructions.c']]],
+  ['sne_5f4xkk_7',['SNE_4xkk',['../instructions_8h.html#a8b0dab19b6554e24e1ded2789f2cc39a',1,'SNE_4xkk(struct t_processor *processor, uint8_t x, uint8_t kk):&#160;instructions.c'],['../instructions_8c.html#a8b0dab19b6554e24e1ded2789f2cc39a',1,'SNE_4xkk(struct t_processor *processor, uint8_t x, uint8_t kk):&#160;instructions.c']]],
+  ['sne_5f9xy0_8',['SNE_9xy0',['../instructions_8h.html#a101696ba9aa242281f518fb5bbe1673a',1,'SNE_9xy0(struct t_processor *processor, uint8_t x, uint8_t y):&#160;instructions.c'],['../instructions_8c.html#a101696ba9aa242281f518fb5bbe1673a',1,'SNE_9xy0(struct t_processor *processor, uint8_t x, uint8_t y):&#160;instructions.c']]],
+  ['speaker_5fdestroy_9',['Speaker_destroy',['../struct_speaker.html#abd1daf4d7ed2a8a8936ff7a6bec6f8ca',1,'Speaker']]],
+  ['speaker_5finit_10',['Speaker_init',['../struct_speaker.html#aceaff6e4ff89d2747e1da9ce0dd58592',1,'Speaker']]],
+  ['speaker_5foff_11',['Speaker_off',['../struct_speaker.html#a47c2bad2cf14dca9ae7cd9f4c29f9f90',1,'Speaker']]],
+  ['speaker_5fon_12',['Speaker_on',['../struct_speaker.html#af28375c06b1fdda19a1ccbd0cd17a9f2',1,'Speaker']]],
+  ['sprite_5fadd_13',['Sprite_add',['../struct_sprite.html#aeba1eb5ceae3c34ab45c25cd983ab9bc',1,'Sprite']]],
+  ['sprite_5fdestroy_14',['Sprite_destroy',['../struct_sprite.html#afca541240e8e05c0fab3f926e2fe79dc',1,'Sprite']]],
+  ['sprite_5fget_15',['Sprite_get',['../struct_sprite.html#ac3595072312fb20cc0372068b92869e4',1,'Sprite']]],
+  ['sprite_5finit_16',['Sprite_init',['../struct_sprite.html#a61803370d9bb96afdbf77a13770187c8',1,'Sprite']]],
+  ['sprite_5flength_17',['Sprite_length',['../struct_sprite.html#aec47e325197bf36159f676003ebe9fad',1,'Sprite']]],
+  ['sub_5f8xy5_18',['SUB_8xy5',['../instructions_8h.html#a3840e82dae1badebd8d7a0400d4708da',1,'SUB_8xy5(struct t_processor *processor, uint8_t x, uint8_t y):&#160;instructions.c'],['../instructions_8c.html#a3840e82dae1badebd8d7a0400d4708da',1,'SUB_8xy5(struct t_processor *processor, uint8_t x, uint8_t y):&#160;instructions.c']]],
+  ['subn_5f8xy7_19',['SUBN_8xy7',['../instructions_8h.html#aba569453f6d92c7e67aca234fd4aac72',1,'SUBN_8xy7(struct t_processor *processor, uint8_t x, uint8_t y):&#160;instructions.c'],['../instructions_8c.html#aba569453f6d92c7e67aca234fd4aac72',1,'SUBN_8xy7(struct t_processor *processor, uint8_t x, uint8_t y):&#160;instructions.c']]]
+];

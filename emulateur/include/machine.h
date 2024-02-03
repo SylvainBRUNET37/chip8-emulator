@@ -43,7 +43,7 @@ struct t_machine
 };
 
 /**
- * \relates t_machine
+ * \memberof t_machine
  * \brief   Alloue en mémoire les élements de la structure \ref t_machine donnee en parametre
  * \param   machine emulateur à initialiser
  * \return  0 si la memoire a bien été allouée, 1 si elle n'a pas ete allouee
@@ -51,21 +51,21 @@ struct t_machine
 int initMachine(struct t_machine* machine);
 
 /**
- * \relates t_machine
+ * \memberof t_machine
  * \brief   Librère la memoire des éléments de la structure \ref t_machine
  * \param   machine emulateur a détruire
  */
 void destroyMachine(struct t_machine* machine);
 
 /**
- * \relates t_machine
+ * \memberof t_machine
  * \brief   Alloue de la mémoire pour une structure \ref t_machine ainsi que pour ses éléments
  * \return  la structure allouée en mémoire et initialisée ou NULL si elle n'a pas pu être allouée
  */
 struct t_machine* newMachine();
 
 /**
- * \relates t_machine
+ * \memberof t_machine
  * \brief   Libère la mémoire de la structure \ref t_machine donnée en paramètre
  * \param   machine emulateur a détruire
  */

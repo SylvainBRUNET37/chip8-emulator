@@ -25,7 +25,7 @@ struct t_RAM
 };
 
 /**
- * \relates t_RAM
+ * \memberof t_RAM
  * \brief   Alloue en mémoire la ram d'une structure \ref t_RAM donnee en parametre
  * \param   RAM  RAM de l'emulateur
  * \return  0 si la memoire a bien ete allouée, 1 si elle n'a pas ete allouée
@@ -33,14 +33,14 @@ struct t_RAM
 int initRAM(struct t_RAM* RAM);
 
 /**
- * \relates t_RAM
+ * \memberof t_RAM
  * \brief   Librere la mémoire de la ram de la structure \ref t_RAM
  * \param   RAM  RAM de l'emulateur
  */
 void destroyRAM(struct t_RAM* RAM);
 
 /**
- * \relates t_RAM
+ * \memberof t_RAM
  * \brief   Alloue la mémoire pour une structure \ref t_RAM ainsi que la mémoire pour sa RAM
  * \param   RAM  RAM de l'emulateur
  * \return  0 si la mémoire a bien ete alouee, 1 si elle n'a pas ete allouée
@@ -48,14 +48,14 @@ void destroyRAM(struct t_RAM* RAM);
 struct t_RAM* newRAM(void);
 
 /**
- * \relates t_RAM
+ * \memberof t_RAM
  * \brief   Libère la mémoire de la structure \ref t_RAM donnée en paramètre
  * \param   RAM  RAM de l'emulateur
  */
 void deleteRAM(struct t_RAM* RAM);
 
 /**
- * \relates t_RAM
+ * \memberof t_RAM
  * \brief   Ecrit la valeur donnée a l'adresse donnée dans la RAM
  * \param   RAM  RAM de l'emulateur
  * \param   adr  adresse où écrire la valeur donnée
@@ -65,7 +65,7 @@ void deleteRAM(struct t_RAM* RAM);
 int writeRAM(struct t_RAM* RAM, uint16_t adr, uint8_t val);
 
 /**
- * \relates t_RAM
+ * \memberof t_RAM
  * \brief   Lit dans en RAM la valeur à l'adresse donnée
  * \param   RAM  RAM de l'emulateur
  * \param   adr  adresse où lire la valeur donnée

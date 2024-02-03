@@ -58,7 +58,7 @@ struct t_processor
 };
 
 /**
- * \relates t_processor
+ * \memberof t_processor
  * \brief   Met à 0 toutes les variables de la structure \ref t_processor. 
  *          Cette fonction remplace init et destroy car il n'y a pas d'allocation à faire ou de mémoire à libérer (les deux ferraient la même chose)
  * \param   processor Processeur de l'emulateur à (ré)initialiser
@@ -66,21 +66,21 @@ struct t_processor
 void resetProcessor(struct t_processor* processor);
 
 /**
- * \relates t_processor
+ * \memberof t_processor
  * \brief   Alloue la mémoire pour une structure \ref t_processor ainsi que la mémoire pour ses élements
  * \return  la structure allouée ou NULL si l'allocation n'a pas pu être faites
  */
 struct t_processor* newProcessor(void);
 
 /**
- * \relates t_processor
+ * \memberof t_processor
  * \brief   Libère la mémoire de la structure \ref t_processor donnée en paramètre
  * \param   processor  Processeur de l'emulateur
  */
 void deleteProcessor(struct t_processor* processor);
 
 /**
- * \relates t_processor
+ * \memberof t_processor
  * \brief   Décrémente de 1 le delay timer et le sound timer si ils ne sont pas à 0
  * \param   processor  Processeur de l'emulateur
  */
