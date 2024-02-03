@@ -1,3 +1,8 @@
+/**
+ * \file  instructions.c
+ * \brief Contient la définition des fonction effectuant les instructions Chip-8
+ */
+
 #include "./include/instructions.h"
 
 void CLS_00E0(struct Display* display)

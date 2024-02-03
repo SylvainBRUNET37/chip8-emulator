@@ -1,17 +1,11 @@
 /**
  * \file  machine.h
- * \brief Gère l'émulateur et contient la boucle principale du programme
- *        Contient aussi la declarations de la structure \ref t_machine (l'émulateur)
+ * \brief Contient aussi la declarations de la structure \ref t_machine (l'émulateur) et des fonctions qui lui sont liée
  */
 
 #ifndef MACHINE_H
 #define MACHINE_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <unistd.h>
-#include "processor.h"
 #include "instructions.h"
 
 #define NB_REPRESENTATIVE_SPRITE 80 // Taille du tableau des sprites des chiffres hexa
@@ -50,65 +44,38 @@ struct t_machine
 
 /**
  * \relates t_machine
- * \brief   Initialise ce qui est nécessaire pour que l'émulateur se lance
- * \param   machine emulateur a initialiser
- * \return  0 si la memoire a bien ete alouee, 1 si elle n'a pas ete allouee
- */
-struct t_machine* initEmu();
-
-/**
- * \relates t_machine
- * \brief   Alloue en memoire les elements de la structure \ref t_machine donnee en parametre
- * \param   machine emulateur a initialiser
- * \return  0 si la memoire a bien ete alouee, 1 si elle n'a pas ete allouee
+ * \brief   Alloue en mémoire les élements de la structure \ref t_machine donnee en parametre
+ * \param   machine emulateur à initialiser
+ * \return  0 si la memoire a bien été allouée, 1 si elle n'a pas ete allouee
  */
 int initMachine(struct t_machine* machine);
 
 /**
  * \relates t_machine
- * \brief   Librere la memoire des elements de la structure \ref t_machine
+ * \brief   Librère la memoire des éléments de la structure \ref t_machine
  * \param   machine emulateur a détruire
  */
 void destroyMachine(struct t_machine* machine);
 
 /**
  * \relates t_machine
- * \brief   Alloue la memoire pour une structure \ref t_machine ainsi que la memoire pour ses elements
- * \return  la structure allouée en mémoire et initialisée
+ * \brief   Alloue de la mémoire pour une structure \ref t_machine ainsi que pour ses éléments
+ * \return  la structure allouée en mémoire et initialisée ou NULL si elle n'a pas pu être allouée
  */
 struct t_machine* newMachine();
 
 /**
  * \relates t_machine
- * \brief   Librere la memoire de la structure \ref t_machine donnee en parametre
+ * \brief   Libère la mémoire de la structure \ref t_machine donnée en paramètre
  * \param   machine emulateur a détruire
  */
 void deleteMachine(struct t_machine* processor);
 
 /**
- * \brief Demande a l'utilisateur quel ROM il veut lancer (et affiche les ROM dispo)
- * \return le nom de la rom choisi par l'utlisateur ou "" si il y a une erreur
- */
-char* askRom(char* romName[50], unsigned int nbFile);
-
-/**
- * \brief Cherche dans le dossier ROM le nom des ROMs
- * \return le nom de la rom choisi par l'utlisateur ou "" si il y a une erreur (return le return de \ref askRom)
- */
-char* searchRomName();
-
-/**
  * \brief Charge dans la RAM les sprites représentatifs
- * \param processor structure dans laquel se trouve la RAM
+ * \param processor la RAM où mettre les sprites
  */
 void loadRepresentativeSprite(struct t_RAM* RAM);
-
-/**
- * \brief Charge dans la RAM la ROM
- * \param processor structure dans laquel se trouve la RAM
- * \param romPath chemin vers la ROM à lancer
- */
-void loadRom(struct t_RAM* RAM, char* romPath);
 
 /**
  * \brief Gère le fetch decode execute et incrémente le programme counter de 2

@@ -1,132 +1,9 @@
+/**
+ * \file  machine.c
+ * \brief Contient la déclaration des fonctions liées à la structure \ref t_machine
+ */
+
 #include "./include/machine.h"
-#include <dirent.h>
-#include <string.h>
-
-int main()
-{
-    struct t_machine* machine = initEmu();
-    if (machine == NULL)
-        return 1;
-
-    unsigned short timerCounter = 0;
-    int error = 0;
-    while(1)
-    {
-        // Endort le programme pendant 2ms pour que le fetch/decode/execute se lance 500 fois par seconde (500Hz)
-        SDL_Delay(2);
-        error = fetchDecodeExecute(machine);
-        if (error == 1)
-        {
-            printf("La valeur de x ou y donnee a la fonction de l'instruction n'est pas valide.\n");
-            return 1;
-        }
-        else if (error == 2)
-        {
-            printf("L'instruction recuperee n'est pas valide.\n");
-        }
-            
-        // Tous les 8 tours de boucle (fréquence : (500/8)Hz ~= 60Hz), décrémente les timers et met à jour l'affichage
-        if (timerCounter == 1)
-        {
-            if (Display_update(machine->display) == 1)
-            {
-                printf("Une fonction de la librairie SDL n'a pas abouti.\n");
-                return 1;
-            }
-            decrementTimer(machine->processor);
-            timerCounter = 0;
-        }
-        timerCounter++;
-    }
-    SDL_Quit();
-    return 0;
-}
-
-struct t_machine* initEmu()
-{
-    // Initialisation la vidéo et l'audio
-    if((SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) == -1)) 
-    { 
-        printf("Impossible d'initialiser la SDL : %s.\n", SDL_GetError());
-        return NULL;
-    }
-
-    // Créé et initialise l'émulateur
-    struct t_machine* machine = newMachine();
-    if (machine == NULL)
-    {
-        printf("L'emulateur n'a pas pu etre cree/initialise.\n");
-        return NULL;
-    }
-    
-    // Initialise le compteur de programme
-    machine->processor->programCounter = 512;
-    
-    // Demande à l'utilisateur quel ROM il veut lancer
-    char* romPath = searchRomName();
-    
-    // Charge en RAM la ROM et les sprites représentatifs
-    loadRepresentativeSprite(machine->RAM);
-    loadRom(machine->RAM, romPath);
-
-    return machine;
-}
-
-char* searchRomName()
-{
-    struct dirent* file;
-    char* romName[50];
-    
-    // Ouvre le répertoir de ROM
-    DIR* directory = opendir("./rom"); 
-    if (directory)
-    {
-        unsigned int nbFile = 0;
-        printf("ROM disponibles :\n");
-        // Boucle tant que le dossier n'a pas été lu en entier
-        while ((file = readdir(directory)) != NULL)
-        {
-            // La fonction readdir lit ".." et "." : ne les stock pas si c'est le nom de fichier lu
-            if (file->d_name[0] != '.')
-            {
-                romName[nbFile] = file->d_name;
-                printf("%d : %s\n", (nbFile+1), file->d_name);
-                nbFile++;
-            }
-        }
-        closedir(directory);
-        return askRom(romName, nbFile);
-    }
-    // Affiche un message d'erreur si le répertoire n'a pas pu être ouvert
-    else
-    {
-        printf("Le repertoire de ROM n'a pas pu etre ouvert.\n");
-        return "";
-    }
-
-}
-
-char* askRom(char* romName[50], unsigned int nbFile)
-{
-    unsigned int romNumber = 0;
-    char romPath[150];
-    // Initialiser le début du chemin
-    strcpy(romPath, "./rom/");
-    
-    // Demande à l'utilisateur le numéro de la ROM qu'il veut lancer
-    do
-    {
-        printf("Saisissez le numero de la rom que vous voulez lancer : ");
-        scanf("%u", &romNumber);
-    } while (romNumber < 1 || romNumber > nbFile);
-
-    // Concatene le début du chemin (./rom/) avec le nom de la ROM
-    strncat(romPath, romName[romNumber-1], sizeof(romPath)-strlen(romPath)-1);
-
-    // Retourner une copie allouée dynamiquement
-    return strdup(romPath);
-}
-
 
 int initMachine(struct t_machine* machine)
 {
@@ -134,11 +11,14 @@ int initMachine(struct t_machine* machine)
     machine->RAM = newRAM();
     if ((machine->RAM) == NULL)
         return 1;
+    loadRepresentativeSprite(machine->RAM);
     
     // Initialise le processeur
     machine->processor = newProcessor();
     if ((machine->processor) == NULL)
         return 1;
+    // Initialise le compteur de programme
+    machine->processor->programCounter = 512;
 
     // Alloue en mémoire le display, le speaker et le keyboard
     machine->display = malloc(sizeof(struct Display));
@@ -147,16 +27,20 @@ int initMachine(struct t_machine* machine)
 
     // Initialise le display, le speaker et le keyboard
     if (Display_init(machine->display, 10) == 1)
+    {
+        printf("%s\n", SDL_GetError());
         return 1;
-        
+    } 
     if (Speaker_init(machine->speaker) == 1)
     {
         printf("%s\n", SDL_GetError());
         return 1;
-    }
-        
+    } 
     if (Keyboard_init(machine->keyboard) == 1)
+    {
+        printf("%s\n", SDL_GetError());
         return 1;
+    } 
 
     return 0;
 }
@@ -235,23 +119,6 @@ void loadRepresentativeSprite(struct t_RAM* RAM)
     // Écrit dans la RAM les réprésentation hexa des sprites dans les NB_REPRESENTATIVE_SPRITE premiers emplacements
     for (uint8_t i = 0 ; i < NB_REPRESENTATIVE_SPRITE ; i++)
         writeRAM(RAM, i, representativeSprite[i]);
-}
-
-void loadRom(struct t_RAM* RAM, char* romPath)
-{
-    FILE* file;
-    uint8_t value;
-    u_int16_t i = 0;
-    
-    // Ouvre la ROM
-    file = fopen(romPath, "rb");
-    
-    // Charge la ROM dans la RAM à partir de l'adresse 512 (tant que le fichier n'est pas fini)
-    while (fread(&value, sizeof(uint8_t), 1, file))
-    {
-        writeRAM(RAM, (512+i), value);
-        i++;
-    }
 }
 
 int fetchDecodeExecute(struct t_machine* machine)

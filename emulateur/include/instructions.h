@@ -1,15 +1,15 @@
 /**
  * \file  instructions.h
- * \brief Contient les instructions Chip-8
+ * \brief Contient la déclaration des fonction effectuant les instructions Chip-8
  */
 
 #ifndef INSTRUCTIONS_H
 #define INSTRUCTIONS_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdbool.h>
+#include "ram.h"
+#include "display.h"
+#include "speaker.h"
+#include "keyboard.h"
 #include "processor.h"
 
 /**

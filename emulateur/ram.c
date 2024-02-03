@@ -1,3 +1,8 @@
+/**
+ * \file  ram.c
+ * \brief Contient la définition des fonctions liée à la structure \ref t_RAM
+ */
+
 #include "./include/ram.h"
 
 int initRAM(struct t_RAM* RAM)
@@ -39,6 +44,7 @@ void deleteRAM(struct t_RAM* RAM)
 
 int writeRAM(struct t_RAM* RAM, uint16_t adr, uint8_t val)
 {
+    // Ecrit dans la RAM la valeur donnée à l'adresse donnée
     if (RAM == NULL)
         return 1;
     RAM->ram[adr] = val;
@@ -47,5 +53,6 @@ int writeRAM(struct t_RAM* RAM, uint16_t adr, uint8_t val)
 
 uint8_t readRAM(struct t_RAM* RAM, uint16_t adr)
 {
+    // Renvoie la valeur en RAM à l'adresse donnée
     return RAM->ram[adr];
 }

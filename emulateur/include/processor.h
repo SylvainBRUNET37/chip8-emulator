@@ -1,6 +1,6 @@
 /**
  * \file  processor.h
- * \brief Contient la declarations de la structure \ref t_processor et des fonctions qui lui sont liee
+ * \brief Contient la declarations de la structure \ref t_processor et les déclarations fonctions qui lui sont liee
  */
 
 #ifndef PROCESSOR_H
@@ -9,11 +9,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include "ram.h"
-#include "display.h"
-#include "speaker.h"
-#include "keyboard.h"
-#include "sprite.h"
+#include <stdbool.h>
+#include <unistd.h>
 
 #define nbGeneralRegister 16
 #define nbStackElement 16
@@ -62,29 +59,29 @@ struct t_processor
 
 /**
  * \relates t_processor
- * \brief   Met à 0 tous les élements de la structure \ref t_processor. 
- *          Cette fonction remplace init et destroy car il n'y a pas d'allocation à faire ou de mémoire à libérer
+ * \brief   Met à 0 toutes les variables de la structure \ref t_processor. 
+ *          Cette fonction remplace init et destroy car il n'y a pas d'allocation à faire ou de mémoire à libérer (les deux ferraient la même chose)
  * \param   processor Processeur de l'emulateur à (ré)initialiser
  */
 void resetProcessor(struct t_processor* processor);
 
 /**
  * \relates t_processor
- * \brief   Alloue la memoire pour une structure \ref t_processor ainsi que la memoire pour ses élements
+ * \brief   Alloue la mémoire pour une structure \ref t_processor ainsi que la mémoire pour ses élements
  * \return  la structure allouée ou NULL si l'allocation n'a pas pu être faites
  */
 struct t_processor* newProcessor(void);
 
 /**
  * \relates t_processor
- * \brief   Librere la memoire de la structure \ref t_processor donnee en parametre
+ * \brief   Libère la mémoire de la structure \ref t_processor donnée en paramètre
  * \param   processor  Processeur de l'emulateur
  */
 void deleteProcessor(struct t_processor* processor);
 
 /**
  * \relates t_processor
- * \brief   Décrémente de 1 le delay timer et le sound timer
+ * \brief   Décrémente de 1 le delay timer et le sound timer si ils ne sont pas à 0
  * \param   processor  Processeur de l'emulateur
  */
 void decrementTimer(struct t_processor* processor);
