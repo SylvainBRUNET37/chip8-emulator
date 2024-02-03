@@ -1,4 +1,0 @@
-1 display
-3 keybord
-
-OVERFLOW : set le flag VF a 1 et met le resultat quand meme dans le registre
