@@ -41,7 +41,9 @@ int initMachine(struct t_machine* machine)
         printf("%s\n", SDL_GetError());
         return 1;
     } 
-
+    // Active le buzzer
+    Speaker_on(machine->speaker);
+    
     return 0;
 }
 
