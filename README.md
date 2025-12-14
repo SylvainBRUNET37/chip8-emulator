@@ -1,17 +1,30 @@
-*** DESCRIPTION DE L'AVANCEMENT ***
+# CHIP-8 emulator
 
-- ROMs de test validés : toutes et jeux complets
-- Possibilité de choisir sa ROM : mettre des ROMs chip8 dans le dossier "/rom" pour pouvoir les lancer
-- Le programme ne se quitte pas toujours proprement lorsqu'on appuie sur la croix en haut à droite de la fenêtre
-- Commentaires et documentation Doxygen
-- Organisation des sources et structuration du code
-- Simple gestion des erreurs (pas de vrai code d'erreur / pas d'assert)
-- Allocation/désallocation de la mémoire
+A CHIP-8 emulator written in C capable of running ROMs of classic games (e.g., Pong, Tetris, etc.). 
+The implementation includes a full CHIP-8 pipeline and instruction implementation, a virtual CPU, memory management and more.
 
-*** LANCER LE PROGRAMME ***
+![](images/pong2players.png)
+![](images/tetris.png)
 
-- Écrire la commande suivante dans le terminal : ./makefile
+## Learnings
 
-*** DOCUMENTATION ***
+- Low-level system programming in C
+- Emulation of a virtual CPU and instruction set
+- Implementation of the fetch–decode–execute pipeline
+- Memory management, stack handling, and register design
+- Bitwise operations and opcode decoding
+- Implementing, debugging and validating behavior against a formal specification
 
-- Lancer "index.html" dans le répetoire "/doc/html"
+## Features
+
+- Full CHIP-8 instruction set implementation
+- CHIP-8 pipeline (fetch, decode, execute)
+- Memory
+- Stack
+- Registers
+- Sound
+- Sprite rendering
+
+## References
+
+- http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
